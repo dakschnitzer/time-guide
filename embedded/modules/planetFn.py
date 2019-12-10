@@ -36,8 +36,6 @@ graphics2 = gfx.GFX(128, 64, display2.pixel)
 
 names = ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']
 
-
-
 def orbitTracker(name):
     # earth heliocentric longitude
     url = "http://api.wolframalpha.com/v1/result?i=earth%20heliocentric%20longitude%3F&appid={0}".format(WOLFRAM_API_KEY)

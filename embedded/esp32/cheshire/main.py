@@ -67,27 +67,47 @@ oled.show()
 display1.show()
 display2.show()
 
-names = ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']
+class Wolfram(object):
 
+    _results = {}
+
+    def __init__(self, api_key):
+        self.api_key = api_key
+
+    def get_data(self, planet, parameter):
+        """Parse the text result from the wolframalpha api."""
+
+        query = "{0} {1}".format(name, parameter)
+        query = query.replace(" ", "+")
+
+        # cache the results locally so next time we dont hit the api
+        if query in self._results:
+            return self._results[query]
+
+        url = "http://api.wolframalpha.com/v1/result?i={0}&appid={1}".format(
+            query,
+            self.api_key
+        )
+
+        r = requests.get(url)
+        value = r.text.split(' ')[0]
+
+        try:
+            # if its a number, turn it into a float
+            value = float(value)
+        except:
+            # if turning it into a float failed, make sure there is no "," in there
+            value = value.replace(",", "")
+
+        # save the value to the cache for next time
+        self._results[query] = value
+
+        r.close()
+        del r
+        gc.collect()
+        return value
 
 def orbitTracker(name):
-    #orbit data
-    # pre-allocate list values from 12/8/2019
-    long_i = [193.0, 327.0, 203.0, 274.0, 291.0, 35.0, 347.0]
-
-    # get fresh heliocentric longitude data
-    url = "http://api.wolframalpha.com/v1/result?i={0}%20heliocentric%20longitude%3F&appid={1}".format(name, WOLFRAM_API_KEY)
-    r = requests.get(url)
-    print(r.text)
-    long = [x.strip() for x in r.text.split(',')]
-    long = [x.strip() for x in long[0].split()]
-    long = long[0]
-    r.close()
-    del r
-    print(long)
-    # save planet data to list
-    long_i[index] = float(long)
-
     # create log scale of sizes of planets
     arb = 0.9
     pre = [1, 2.48, 2.61, 1.39, 28.66, 23.9, 10.4, 10.1]
@@ -119,7 +139,7 @@ def orbitTracker(name):
     xc = 63
     yc = 31
     rad_i = [int(x/4) for x in pxc]
-    p_rad = [math.radians(x) for x in long_i]
+    p_rad = [math.radians(x) for x in long]
     xp = [int(round(a * math.cos(b))) for a,b in zip(rad_i,p_rad)]
     yp = [int(round(a * math.sin(b))) for a,b in zip(rad_i,p_rad)]
 
@@ -130,206 +150,51 @@ def orbitTracker(name):
 
 
 def orbitData1(name):
-    # pre-allocate list values from 12/8/2019
-    dist_i = [1.22, 1.4, 2.34, 6.18, 10.9, 19.1, 29.9]
-    long_i = [193.0, 327.0, 203.0, 274.0, 291.0, 35.0, 347.0]
-
-    # get fresh orbit data
-    # heliocentric longitude
-    url = "http://api.wolframalpha.com/v1/result?i={0}%20heliocentric%20longitude%3F&appid={1}".format(name, WOLFRAM_API_KEY)
-    r = requests.get(url)
-    print(r.text)
-    long = [x.strip() for x in r.text.split(',')]
-    long = [x.strip() for x in long[0].split()]
-    long = long[0]
-    r.close()
-    del r
-    print(long)
-    # save planet data to list
-    long_i[index] = float(long)
-
-    # distance from earth
-    url = "http://api.wolframalpha.com/v1/result?i={0}%20distance%20from%20earth%3F&appid={1}".format(name, WOLFRAM_API_KEY)
-    r = requests.get(url)
-    print(r.text)
-    dist = [x.strip() for x in r.text.split(',')]
-    dist = [x.strip() for x in dist[0].split()]
-    dist = dist[1]
-    r.close()
-    del r
-    print(dist)
-    # save planet data to list
-    dist_i[index] = float(dist)
-
     # show data on display2
     display2.text('Heliocent. long.: ',0,15)
-    display2.text(str(long_i[index]),0,25)
+    display2.text(str(long[index]),0,25)
     display2.text('D to Earth (AU): ',0,38)
-    display2.text(str(round(dist_i[index],1)),0,48)
+    display2.text(str(round(dist[index],1)),0,48)
 
 
 def orbitData2(name):
-    #periods of planets without earth
-    period = [0.2408467, 0.615197, 1.8808476, 11.862615, 29.447498, 84.016846, 164.79132]
-    # pre-allocate list values from 12/8/2019
-    years_i = ['Feb 12, 2020', 'Mar 19, 2020', 'Aug 3, 2020', 'Jan 24, 2023', 'Dec 24, 2032', 'Feb 10, 2051', 'Jul 16, 2047']
-
-    # perihelion date
-    url = "http://api.wolframalpha.com/v1/result?i={0}%20next%20periapsis%3F&appid={1}".format(name, WOLFRAM_API_KEY)
-    r = requests.get(url)
-    print(r.text)
-    years = r.text
-    years = [x.strip() for x in years.split()]
-    years = years[0][:3] + " " + years[1] + " " + years[2]
-    r.close()
-    del r
-    gc.collect()
-    # save planet data to list
-    years_i[index] = years
-
     display2.text('Next perihelion:',0,15)
-    display2.text(years_i[index],0,25)
+    display2.text(years[index],0,25)
     display2.text('Orbital pd (yr):',0,38)
     display2.text(str(round(period[index],1)),0,48)
 
 
+
+
 def skyLocation(name):
-    # pre-allocate list values from 12/8/2019
-    visible_i = ['No', 'No', 'No', 'No', 'No', 'Yes', 'Yes']
-    azc_i = [306.0, 259.0, 342.0, 269.0, 259.0, 184.0, 233.0]
-    azr_i = [114.0, 121.0, 109.0, 120.0, 118.0, 73.0, 97.0]
-    azs_i = [245.0, 239.0, 250.0, 239.0, 241.0, 286.0, 262.0]
-    azm_i = [180.0, 179.0, 179.0, 179.0, 180.0, 179.0, 179.0]
-    alc_i = [60.0, 26.0, 65.0, 38.0, 23.0, 63.0, 27.0]
-    alm_i = [32.0, 26.0, 35.0, 27.0, 29.0, 63.0, 44.0]
-
-    # get fresh sky chart data
-    # obtain planet above horizon from wolframalpha API
-    url = "http://api.wolframalpha.com/v1/result?i={0}%20above%20horizon%3F&appid={1}".format(name, WOLFRAM_API_KEY)
-    r = requests.get(url)
-    print(r.text)
-    visible = [x.strip() for x in r.text.split(',')]
-    visible = visible[0]
-    print(visible)
-    r.close()
-    del r
-    visible_i[index] = visible
-    gc.collect()
-
-    # sky chart data
-    # obtain current planet azimuth from wolframalpha API
-    url = "http://api.wolframalpha.com/v1/result?i={0}%20azimuth%3F&appid={1}".format(name, WOLFRAM_API_KEY)
-    r = requests.get(url)
-    print(r.text)
-    azc = [x.strip() for x in r.text.split(',')]
-    azc = [x.strip() for x in azc[0].split()]
-    azc = azc[0]
-    azc = float(azc)
-    print(azc)
-    r.close()
-    del r
-    azc_i[index] = azc
-    gc.collect()
-
-    # obtain planet azimuth rise from wolframalpha API
-    url = "http://api.wolframalpha.com/v1/result?i={0}%20azimuth%20rise%3F&appid={1}".format(name, WOLFRAM_API_KEY)
-    r = requests.get(url)
-    print(r.text)
-    azr = [x.strip() for x in r.text.split(',')]
-    azr = [x.strip() for x in azr[0].split()]
-    azr = azr[0]
-    azr = float(azr)
-    print(azr)
-    r.close()
-    del r
-    azr_i[index] = azr
-    gc.collect()
-
-    # obtain planet azimuth set from wolframalpha API
-    url = "http://api.wolframalpha.com/v1/result?i={0}%20azimuth%20set%3F&appid={1}".format(name, WOLFRAM_API_KEY)
-    r = requests.get(url)
-    print(r.text)
-    azs = [x.strip() for x in r.text.split(',')]
-    azs = [x.strip() for x in azs[0].split()]
-    azs = azs[0]
-    azs = float(azs)
-    print(azs)
-    r.close()
-    del r
-    azs_i[index] = azs
-    gc.collect()
-
-    # obtain planet azimuth at maximum altitude from wolframalpha API
-    url = "http://api.wolframalpha.com/v1/result?i={0}%20azimuth%20at%20time%20of%20maximum%20altitude%3F&appid={1}".format(name, WOLFRAM_API_KEY)
-    r = requests.get(url)
-    print(r.text)
-    azm = [x.strip() for x in r.text.split(',')]
-    azm = [x.strip() for x in azm[0].split()]
-    azm = azm[0]
-    azm = float(azm)
-    print(azm)
-    r.close()
-    del r
-    azm_i[index] = azm
-    gc.collect()
-
-    # obtain current planet altitude from wolframalpha API
-    url = "http://api.wolframalpha.com/v1/result?i={0}%20altitude%3F&appid={1}".format(name, WOLFRAM_API_KEY)
-    r = requests.get(url)
-    print(r.text)
-    alc = [x.strip() for x in r.text.split(',')]
-    alc = [x.strip() for x in alc[0].split()]
-    alc = alc[0]
-    alc = float(alc)
-    print(alc)
-    r.close()
-    del r
-    alc_i[index] = alc
-    gc.collect()
-
-    # obtain max planet altitude from wolframalpha API
-    url = "http://api.wolframalpha.com/v1/result?i={0}%20maximum%20altitude%3F&appid={1}".format(name, WOLFRAM_API_KEY)
-    r = requests.get(url)
-    print(r.text)
-    alm = [x.strip() for x in r.text.split(',')]
-    alm = [x.strip() for x in alm[0].split()]
-    alm = alm[0]
-    alm = float(alm)
-    print(alm)
-    r.close()
-    del r
-    alm_i[index] = alm
-    gc.collect()
-
-
     xc = 63
     yc = 31
     rad = 29
 
     # calculate planet rise azimuth
-    x = int(round(rad * math.cos(math.radians(azr_i[index] - 90)),0))
-    y = int(round(rad * math.sin(math.radians(azr_i[index] - 90)),0))
+    x = int(round(rad * math.cos(math.radians(azr[index] - 90)),0))
+    y = int(round(rad * math.sin(math.radians(azr[index] - 90)),0))
     xr = xc + x
     yr = yc + y
 
     # calculate planet set azimuth
-    x = int(round(rad * math.cos(math.radians(azs_i[index] - 90)),0))
-    y = int(round(rad * math.sin(math.radians(azs_i[index] - 90)),0))
+    x = int(round(rad * math.cos(math.radians(azs[index] - 90)),0))
+    y = int(round(rad * math.sin(math.radians(azs[index] - 90)),0))
     xs = xc + x
     ys = yc + y
 
     # calculate location at maximum altitude
-    rd = int(round(rad * (90 - alm_i[index])/90,0))
-    x = int(round(rd * math.cos(math.radians(azm_i[index] - 90)),0))
-    y = int(round(rd * math.sin(math.radians(azm_i[index] - 90)),0))
+    rd = int(round(rad * (90 - alm[index])/90,0))
+    x = int(round(rd * math.cos(math.radians(azm[index] - 90)),0))
+    y = int(round(rd * math.sin(math.radians(azm[index] - 90)),0))
     xm = xc + x
     ym = yc + y
 
     # calculate current location if visible
-    if visible_i[index] == 'Yes':
-        rd = int(round(rad * (90 - alc_i[index])/90,0))
-        x = int(round(rd * math.cos(math.radians(azc_i[index] - 90)),0))
-        y = int(round(rd * math.sin(math.radians(azc_i[index] - 90)),0))
+    if visible[index] == 'Yes':
+        rd = int(round(rad * (90 - alc[index])/90,0))
+        x = int(round(rd * math.cos(math.radians(azc[index] - 90)),0))
+        y = int(round(rd * math.sin(math.radians(azc[index] - 90)),0))
         xcu = xc + x
         ycu = yc + y
 
@@ -353,7 +218,7 @@ def skyLocation(name):
     graphics1.fill_circle(xr, yr, 2, 1)
     graphics1.fill_circle(xs, ys, 2, 1)
     graphics1.fill_circle(xm, ym, 2, 1)
-    if visible_i[index] == 'Yes':
+    if visible[index] == 'Yes':
         graphics1.circle(xcu, ycu, 2, 1)
 
     # show path of transit
@@ -366,19 +231,16 @@ def skyLocation(name):
 
 
 def skyLocGraph(name):
-    visible_i = ['No', 'No', 'No', 'No', 'No', 'Yes', 'Yes']
-    azc_i = [306.0, 259.0, 342.0, 269.0, 259.0, 184.0, 233.0]
-    alc_i = [60.0, 26.0, 65.0, 38.0, 23.0, 63.0, 27.0]
 
     display2.text("Visible:", 0, 0)
-    display2.text(visible_i[index], 64, 0)
+    display2.text(visible[index], 64, 0)
 
     # show planet altitude
-    if visible_i[index] == 'Yes':
+    if visible[index] == 'Yes':
         display2.text("Alt.:", 0, 20)
-        display2.text(str(round(alc_i[index])), 40, 20)
+        display2.text(str(round(alc[index])), 40, 20)
         graphics2.line(8, 63, 38, 63, 1)
-        y = 30 * math.sin(math.radians(alc_i[index]))
+        y = 30 * math.sin(math.radians(alc[index]))
         y = int(round(y,0))
         graphics2.line(8, 63, 38, 63 - y, 1)
 
@@ -388,12 +250,12 @@ def skyLocGraph(name):
     rad = 17
 
     display2.text("Az.:", 68, 10)
-    display2.text(str(round(azc_i[index])), 98, 10)
+    display2.text(str(round(azc[index])), 98, 10)
     display2.text("N", xc - 3, 20)
     graphics2.circle(xc, yc, rad, 1)
-    x = rad * math.cos(math.radians(azc_i[index] - 90))
+    x = rad * math.cos(math.radians(azc[index] - 90))
     x = round(x,0)
-    y = rad * math.sin(math.radians(azc_i[index] - 90))
+    y = rad * math.sin(math.radians(azc[index] - 90))
     y = round(y,0)
     display2.line(xc, yc, int(xc + x), int(yc + y), 1)
 
@@ -438,6 +300,21 @@ def showStarfield():
     display1.show()
     display2.show()
 
+names = ['Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus', 'Neptune']
+period = [0.2408467, 0.615197, 1.8808476, 11.862615, 29.447498, 84.016846, 164.79132]
+
+# pre-allocate lists with Dec 9, 2019 values
+visible = ['No', 'No', 'No', 'No', 'No', 'Yes', 'Yes']
+azc = [306.0, 259.0, 342.0, 269.0, 259.0, 184.0, 233.0]
+azr = [114.0, 121.0, 109.0, 120.0, 118.0, 73.0, 97.0]
+azs = [245.0, 239.0, 250.0, 239.0, 241.0, 286.0, 262.0]
+azm = [180.0, 179.0, 179.0, 179.0, 180.0, 179.0, 179.0]
+alc = [60.0, 26.0, 65.0, 38.0, 23.0, 63.0, 27.0]
+alm = [32.0, 26.0, 35.0, 27.0, 29.0, 63.0, 44.0]
+long = [193.0, 327.0, 203.0, 274.0, 291.0, 35.0, 347.0]
+dist = [1.22, 1.4, 2.34, 6.18, 10.9, 19.1, 29.9]
+years = ['Feb 12, 2020', 'Mar 19, 2020', 'Aug 3, 2020', 'Jan 24, 2023', 'Dec 24, 2032', 'Feb 10, 2051', 'Jul 16, 2047']
+
 
 #starfield
 stars = 500
@@ -459,6 +336,108 @@ while True:
     showStarfield()
 
     if not button.value():
+
+        wolf = Wolfram(WOLFRAM_API_KEY)
+
+        for index, name in enumerate(names):
+            oled.fill(0)
+            oled.text('Aquiring data:', 0, 0)
+            oled.text(name, 0, 12)
+            oled.show()
+
+            # obtain planet distance from earth from wolframalpha API
+            url = "http://api.wolframalpha.com/v1/result?i={0}%20distance%20from%20earth%3F&appid={1}".format(name, WOLFRAM_API_KEY)
+            r = requests.get(url)
+            dist[index] = [x.strip() for x in r.text.split(',')]
+            dist[index] = [x.strip() for x in dist[index][0].split()]
+            dist[index] = dist[index][1]
+            r.close()
+            del r
+            gc.collect()
+            dist[index] = float(dist[index])
+
+            oled.pixel(0, 30, 1)
+            oled.show()
+
+            # obtain next periapsis from wolframalpha API
+            url = "http://api.wolframalpha.com/v1/result?i={0}%20next%20periapsis%3F&appid={1}".format(name, WOLFRAM_API_KEY)
+            r = requests.get(url)
+            years[index] = r.text
+            years[index] = [x.strip() for x in years[index].split()]
+            years[index] = years[index][0][:3] + " " + years[index][1] + " " + years[index][2]
+            r.close()
+            del r
+            gc.collect()
+
+            oled.pixel(2, 30, 1)
+            oled.show()
+
+            # obtain planet heliocentric longitude from wolframalpha API
+            long[index] = wolf.get_data(
+                planet=name,
+                parameter="heliocentric longitude",
+            )
+            oled.pixel(4, 30, 1)
+            oled.show()
+
+            # obtain planet above horizon from wolframalpha API
+            visible[index] = wolf.get_data(
+                planet=name,
+                parameter="above horizon",
+            )
+            oled.pixel(6, 30, 1)
+            oled.show()
+
+            # sky chart data
+            # obtain current planet azimuth from wolframalpha API
+            azc[index] = wolf.get_data(
+                planet=name,
+                parameter="azimuth",
+            )
+            oled.pixel(8, 30, 1)
+            oled.show()
+
+            # obtain planet azimuth rise from wolframalpha API
+            azr[index] = wolf.get_data(
+                planet=name,
+                parameter="azimuth rise",
+            )
+            oled.pixel(10, 30, 1)
+            oled.show()
+
+            # obtain planet azimuth set from wolframalpha API
+            azs[index] = wolf.get_data(
+                planet=name,
+                parameter="azimuth set",
+            )
+            oled.pixel(12, 30, 1)
+            oled.show()
+
+            # obtain planet azimuth at maximum altitude from wolframalpha API
+            azm[index] = wolf.get_data(
+                planet=name,
+                parameter="azimuth at time of maximum altitude",
+            )
+            oled.pixel(14, 30, 1)
+            oled.show()
+
+            # obtain current planet altitude from wolframalpha API
+            alc[index] = wolf.get_data(
+                planet=name,
+                parameter="altitude",
+            )
+            oled.pixel(16, 30, 1)
+            oled.show()
+
+            # obtain max planet altitude from wolframalpha API
+            alm[index] = wolf.get_data(
+                planet=name,
+                parameter="maximum altitude",
+            )
+            oled.pixel(18, 30, 1)
+            oled.show()
+
+
         # get earth heliocentric longitude
         url = "http://api.wolframalpha.com/v1/result?i=earth%20heliocentric%20longitude%3F&appid={0}".format(WOLFRAM_API_KEY)
         r = requests.get(url)
@@ -595,10 +574,6 @@ while True:
         display2.show()
 
         for index, name in enumerate(names):
-            oled.fill(0)
-            oled.text('Aquiring transit:', 0, 0)
-            oled.text(name, 0, 12)
-            oled.show()
             skyLocation(name)
 
             oled.fill(0)
