@@ -324,127 +324,127 @@ star_z = list(range(stars))
 xc = 63;
 yc = 31;
 
-for i in range(stars):
-    initStar(i)
-
+#for i in range(stars):
+#    initStar(i)
+#
 while True:
-    oled.fill(0)
-    display1.fill(0)
-    display2.fill(0)
-
-    showStarfield()
+#    oled.fill(0)
+#    display1.fill(0)
+#    display2.fill(0)
+#
+#    showStarfield()
 
     if not button.value():
 
-        wolf = Wolfram(WOLFRAM_API_KEY)
-
-        for index, name in enumerate(names):
-            oled.fill(0)
-            oled.text('Aquiring data:', 0, 0)
-            oled.text(name, 0, 12)
-            graphics.circle(3, 30, 2, 1)
-            graphics.circle(8, 30, 2, 1)
-            graphics.circle(13, 30, 2, 1)
-            graphics.circle(18, 30, 2, 1)
-            graphics.circle(23, 30, 2, 1)
-            graphics.circle(28, 30, 2, 1)
-            graphics.circle(33, 30, 2, 1)
-            graphics.circle(38, 30, 2, 1)
-            graphics.circle(43, 30, 2, 1)
-            graphics.circle(48, 30, 2, 1)
-            oled.show()
-
-            # obtain planet distance from earth from wolframalpha API
-            url = "http://api.wolframalpha.com/v1/result?i={0}%20distance%20from%20earth%3F&appid={1}".format(name, WOLFRAM_API_KEY)
-            r = requests.get(url)
-            dist[index] = [x.strip() for x in r.text.split(',')]
-            dist[index] = [x.strip() for x in dist[index][0].split()]
-            dist[index] = dist[index][1]
-            r.close()
-            del r
-            gc.collect()
-            dist[index] = float(dist[index])
-
-            graphics.fill_circle(3, 30, 2, 1)
-            oled.show()
-
-            # obtain next periapsis from wolframalpha API
-            url = "http://api.wolframalpha.com/v1/result?i={0}%20next%20periapsis%3F&appid={1}".format(name, WOLFRAM_API_KEY)
-            r = requests.get(url)
-            years[index] = r.text
-            years[index] = [x.strip() for x in years[index].split()]
-            years[index] = years[index][0][:3] + " " + years[index][1] + " " + years[index][2]
-            r.close()
-            del r
-            gc.collect()
-
-            graphics.fill_circle(8, 30, 2, 1)
-            oled.show()
-
-            # obtain planet heliocentric longitude from wolframalpha API
-            long[index] = wolf.get_data(
-                planet=name,
-                parameter="heliocentric longitude",
-            )
-            graphics.fill_circle(13, 30, 2, 1)
-            oled.show()
-
-            # obtain planet above horizon from wolframalpha API
-            visible[index] = wolf.get_data(
-                planet=name,
-                parameter="above horizon",
-            )
-            graphics.fill_circle(18, 30, 2, 1)
-            oled.show()
-
-            # sky chart data
-            # obtain current planet azimuth from wolframalpha API
-            azc[index] = wolf.get_data(
-                planet=name,
-                parameter="azimuth",
-            )
-            graphics.fill_circle(23, 30, 2, 1)
-            oled.show()
-
-            # obtain planet azimuth rise from wolframalpha API
-            azr[index] = wolf.get_data(
-                planet=name,
-                parameter="azimuth rise",
-            )
-            graphics.fill_circle(28, 30, 2, 1)
-            oled.show()
-
-            # obtain planet azimuth set from wolframalpha API
-            azs[index] = wolf.get_data(
-                planet=name,
-                parameter="azimuth set",
-            )
-            graphics.fill_circle(33, 30, 2, 1)
-            oled.show()
-
-            # obtain planet azimuth at maximum altitude from wolframalpha API
-            azm[index] = wolf.get_data(
-                planet=name,
-                parameter="azimuth at time of maximum altitude",
-            )
-            graphics.fill_circle(38, 30, 2, 1)
-            oled.show()
-
-            # obtain current planet altitude from wolframalpha API
-            alc[index] = wolf.get_data(
-                planet=name,
-                parameter="altitude",
-            )
-            graphics.fill_circle(43, 30, 2, 1)
-            oled.show()
-
-            # obtain max planet altitude from wolframalpha API
-            alm[index] = wolf.get_data(
-                planet=name,
-                parameter="maximum altitude",
-            )
-            graphics.fill_circle(48, 30, 2, 1)
-            oled.show()
+#        wolf = Wolfram(WOLFRAM_API_KEY)
+#
+#        for index, name in enumerate(names):
+#            oled.fill(0)
+#            oled.text('Aquiring data:', 0, 0)
+#            oled.text(name, 0, 12)
+#            graphics.circle(3, 30, 2, 1)
+#            graphics.circle(8, 30, 2, 1)
+#            graphics.circle(13, 30, 2, 1)
+#            graphics.circle(18, 30, 2, 1)
+#            graphics.circle(23, 30, 2, 1)
+#            graphics.circle(28, 30, 2, 1)
+#            graphics.circle(33, 30, 2, 1)
+#            graphics.circle(38, 30, 2, 1)
+#            graphics.circle(43, 30, 2, 1)
+#            graphics.circle(48, 30, 2, 1)
+#            oled.show()
+#
+#            # obtain planet distance from earth from wolframalpha API
+#            url = "http://api.wolframalpha.com/v1/result?i={0}%20distance%20from%20earth%3F&appid={1}".format(name, WOLFRAM_API_KEY)
+#            r = requests.get(url)
+#            dist[index] = [x.strip() for x in r.text.split(',')]
+#            dist[index] = [x.strip() for x in dist[index][0].split()]
+#            dist[index] = dist[index][1]
+#            r.close()
+#            del r
+#            gc.collect()
+#            dist[index] = float(dist[index])
+#
+#            graphics.fill_circle(3, 30, 2, 1)
+#            oled.show()
+#
+#            # obtain next periapsis from wolframalpha API
+#            url = "http://api.wolframalpha.com/v1/result?i={0}%20next%20periapsis%3F&appid={1}".format(name, WOLFRAM_API_KEY)
+#            r = requests.get(url)
+#            years[index] = r.text
+#            years[index] = [x.strip() for x in years[index].split()]
+#            years[index] = years[index][0][:3] + " " + years[index][1] + " " + years[index][2]
+#            r.close()
+#            del r
+#            gc.collect()
+#
+#            graphics.fill_circle(8, 30, 2, 1)
+#            oled.show()
+#
+#            # obtain planet heliocentric longitude from wolframalpha API
+#            long[index] = wolf.get_data(
+#                planet=name,
+#                parameter="heliocentric longitude",
+#            )
+#            graphics.fill_circle(13, 30, 2, 1)
+#            oled.show()
+#
+#            # obtain planet above horizon from wolframalpha API
+#            visible[index] = wolf.get_data(
+#                planet=name,
+#                parameter="above horizon",
+#            )
+#            graphics.fill_circle(18, 30, 2, 1)
+#            oled.show()
+#
+#            # sky chart data
+#            # obtain current planet azimuth from wolframalpha API
+#            azc[index] = wolf.get_data(
+#                planet=name,
+#                parameter="azimuth",
+#            )
+#            graphics.fill_circle(23, 30, 2, 1)
+#            oled.show()
+#
+#            # obtain planet azimuth rise from wolframalpha API
+#            azr[index] = wolf.get_data(
+#                planet=name,
+#                parameter="azimuth rise",
+#            )
+#            graphics.fill_circle(28, 30, 2, 1)
+#            oled.show()
+#
+#            # obtain planet azimuth set from wolframalpha API
+#            azs[index] = wolf.get_data(
+#                planet=name,
+#                parameter="azimuth set",
+#            )
+#            graphics.fill_circle(33, 30, 2, 1)
+#            oled.show()
+#
+#            # obtain planet azimuth at maximum altitude from wolframalpha API
+#            azm[index] = wolf.get_data(
+#                planet=name,
+#                parameter="azimuth at time of maximum altitude",
+#            )
+#            graphics.fill_circle(38, 30, 2, 1)
+#            oled.show()
+#
+#            # obtain current planet altitude from wolframalpha API
+#            alc[index] = wolf.get_data(
+#                planet=name,
+#                parameter="altitude",
+#            )
+#            graphics.fill_circle(43, 30, 2, 1)
+#            oled.show()
+#
+#            # obtain max planet altitude from wolframalpha API
+#            alm[index] = wolf.get_data(
+#                planet=name,
+#                parameter="maximum altitude",
+#            )
+#            graphics.fill_circle(48, 30, 2, 1)
+#            oled.show()
 
         # get earth heliocentric longitude
         url = "http://api.wolframalpha.com/v1/result?i=earth%20heliocentric%20longitude%3F&appid={0}".format(WOLFRAM_API_KEY)
@@ -461,40 +461,223 @@ while True:
 
 
         #start main sequence
-
+        for i in range(2):
+            display1.fill(1)
+            display2.fill(1)
+            display1.show()
+            display2.show()
+            utime.sleep(0.5)
+            display1.fill(0)
+            display2.fill(0)
+            display1.show()
+            display2.show()
+            utime.sleep(0.5)
 
         display2.text('This is our sky',0,0)
         display2.text('from here.',0,12)
 
-        xc = 63
-        yc = 31
-        rad = 29
-        graphics1.circle(xc, yc, rad, 1)
+#        xc = 63
+#        yc = 31
+#        rad = 29
+#        graphics1.circle(xc, yc, rad, 1)
+#
+#        display1.show()
+#        display2.show()
+#
+#        utime.sleep(5)
+#
+#        display2.fill(0)
+#        display2.show()
+#
+#        #call skychart function in loop for overlay
+#        display2.text('This is the',0,0)
+#        display2.text('transit of each',0,15)
+#        display2.text('planet across',0,30)
+#        display2.text('our sky today.',0,45)
+#        display2.show()
+#
+#        for index, name in enumerate(names):
+#            skyLocation(name)
+#            oled.fill(0)
+#            oled.text(name, 0, 0)
+#            oled.show()
+#            display1.show()
+#            utime.sleep(2)
+#
+#        utime.sleep(5)
+#
+#        oled.fill(0)
+#        display1.fill(0)
+#        display2.fill(0)
+#
+#        oled.show()
+#        display1.show()
+#        display2.show()
+#
+#        utime.sleep(2)
+#
+#        display2.text('Not that it',0,0)
+#        display2.text('matters, but not',0,12)
+#        display2.text('all the planets',0,24)
+#        display2.text('are visible now.',0,36)
+#        display2.show()
+#
+#        utime.sleep(4)
+#
+#        display2.fill(0)
+#        display2.show()
+#
+#        #call SkyLocation function in loop for each individual planet
+#        for index, name in enumerate(names):
+#            oled.fill(0)
+#            display1.fill(0)
+#            display2.fill(0)
+#
+#            oled.text(name, 0, 0)
+#            skyLocation(name)
+#            skyLocGraph(name)
+#
+#            oled.show()
+#            display1.show()
+#            display2.show()
+#
+#            utime.sleep(4)
+#
+#
+#        oled.fill(0)
+#        display1.fill(0)
+#        display2.fill(0)
+#
+#        oled.show()
+#        display1.show()
+#        display2.show()
+#
+#        utime.sleep(2)
+#
+#
+#        # art text
+#        display1.text('Watching the sky',0,0)
+#        display1.text('has always been',0,12)
+#        display1.text('fundamental to',0,24)
+#        display1.text('humanity.',0,36)
+#
+#        display1.show()
+#        utime.sleep(5)
+#
+#        display1.fill(0)
+#        display1.show()
+#        utime.sleep(2)
+#
+#        display2.text('Someday we might',0,0)
+#        display2.text('keep watch over',0,12)
+#        display2.text('the Solar System',0,24)
+#        display2.text('; an act of',0,36)
+#        display2.text('mass surveilance.',0,48)
+#
+#        display2.show()
+#        utime.sleep(5)
+#
+#        display2.fill(0)
+#        display2.show()
+#        utime.sleep(2)
+#
+#        display1.text('We will never',0,0)
+#        display1.text('have an all-',0,12)
+#        display1.text('watching eye',0,24)
+#        display1.text('over the',0,36)
+#        display1.text('Cosmos.',0,48)
+#
+#        display1.show()
+#        utime.sleep(5)
+#
+#        # plot earth
+#        xc = 63
+#        yc = 31
+#        xe = int(round((40/4) * math.cos(elong),0))
+#        ye = int(round((40/4) * math.sin(elong),0))
+#
+#        #oled display Earth name
+#        oled.fill(0)
+#        oled.text('Earth', 0, 0)
+#
+#        #display1 display Earth
+#        display1.fill(0)
+#        graphics1.circle(xc + xe, yc - ye, 1, 1)
+#
+#        #display2 display text
+#        display2.fill(0)
+#        display2.text('You are here.',0,0)
+#
+#        oled.show()
+#        display1.show()
+#        display2.show()
+#        utime.sleep(4)
+#
+#        display2.fill(0)
+#        display2.show()
+#        utime.sleep(2)
+#
+#        display2.text('This is the',0,0)
+#        display2.text('current',0,12)
+#        display2.text('configuration of',0,24)
+#        display2.text('our Solar System.',0,36)
+#        display2.show()
+#
+#        #call function in loop for overlay of Orbits
+#        for index, name in enumerate(names):
+#            oled.fill(0)
+#            orbitTracker(name)
+#            oled.text(name, 0, 0)
+#            oled.show()
+#            display1.show()
+#            utime.sleep(2)
+#
+#        oled.fill(0)
+#        display1.fill(0)
+#        display2.fill(0)
+#
+#        oled.show()
+#        display1.show()
+#        display2.show()
+#
+#        utime.sleep(2)
+#
+#        display2.text('This is some',0,0)
+#        display2.text('information',0,12)
+#        display2.text('about where the',0,24)
+#        display2.text('planets are now.',0,36)
+#        display2.show()
+#
+#        utime.sleep(4)
+#
+#        display2.fill(0)
+#        display2.show()
+#
+#        #call orbit function in loop for each individual planet
+#        for index, name in enumerate(names):
+#            oled.fill(0)
+#            oled.text(name, 0, 0)
+#            oled.show()
+#
+#            orbitTracker(name)
+#            # show earth on display 1
+#            graphics1.circle(xc + xe, yc - ye, 1, 1)
+#            orbitData1(name)
+#
+#            display1.show()
+#            display2.show()
+#            utime.sleep(3)
+#
+#            display2.fill(0)
+#            orbitData2(name)
+#            display2.show()
+#            utime.sleep(3)
+#
+#            display1.fill(0)
+#            display2.fill(0)
+#            display1.show()
+#            display2.show()
 
-        display1.show()
-        display2.show()
-
-        utime.sleep(5)
-
-        display2.fill(0)
-        display2.show()
-
-        #call skychart function in loop for overlay
-        display2.text('This is the',0,0)
-        display2.text('transit of each',0,15)
-        display2.text('planet across',0,30)
-        display2.text('our sky today.',0,45)
-        display2.show()
-
-        for index, name in enumerate(names):
-            skyLocation(name)
-            oled.fill(0)
-            oled.text(name, 0, 0)
-            oled.show()
-            display1.show()
-            utime.sleep(2)
-
-        utime.sleep(5)
 
         oled.fill(0)
         display1.fill(0)
@@ -506,198 +689,64 @@ while True:
 
         utime.sleep(2)
 
-        display2.text('Not that it',0,0)
-        display2.text('matters, but not',0,12)
-        display2.text('all the planets',0,24)
-        display2.text('are visible now.',0,36)
-        display2.show()
-
-        utime.sleep(4)
-
-        display2.fill(0)
-        display2.show()
-
-        #call SkyLocation function in loop for each individual planet
-        for index, name in enumerate(names):
-            oled.fill(0)
-            display1.fill(0)
-            display2.fill(0)
-
-            oled.text(name, 0, 0)
-            skyLocation(name)
-            skyLocGraph(name)
-
-            oled.show()
-            display1.show()
-            display2.show()
-
-            utime.sleep(4)
-
-
-        oled.fill(0)
-        display1.fill(0)
-        display2.fill(0)
-
-        oled.show()
-        display1.show()
-        display2.show()
-
-        utime.sleep(2)
-
-
-        # art text
-        display1.text('Watching the sky',0,0)
-        display1.text('has always been',0,12)
-        display1.text('fundamental to',0,24)
-        display1.text('humanity.',0,36)
-
-        display1.show()
-        utime.sleep(5)
-
         display1.fill(0)
         display1.show()
         utime.sleep(2)
 
-        display2.text('Someday we might',0,0)
-        display2.text('keep watch over',0,12)
-        display2.text('the Solar System',0,24)
-        display2.text('; an act of',0,36)
-        display2.text('mass surveilance.',0,48)
 
-        display2.show()
-        utime.sleep(5)
-
-        display2.fill(0)
-        display2.show()
-        utime.sleep(2)
-
-        display1.text('We will never',0,0)
-        display1.text('have an all-',0,12)
-        display1.text('watching eye',0,24)
-        display1.text('over the',0,36)
-        display1.text('Cosmos.',0,48)
-
-        display1.show()
-        utime.sleep(5)
-
-        # plot earth
-        xc = 63
-        yc = 31
-        xe = int(round((40/4) * math.cos(elong),0))
-        ye = int(round((40/4) * math.sin(elong),0))
-
-        #oled display Earth name
-        oled.fill(0)
-        oled.text('Earth', 0, 0)
-
-        #display1 display Earth
-        display1.fill(0)
-        graphics1.circle(xc + xe, yc - ye, 1, 1)
-
-        #display2 display text
-        display2.fill(0)
-        display2.text('You are here.',0,0)
-
-        oled.show()
-        display1.show()
-        display2.show()
-        utime.sleep(4)
-
-        display2.fill(0)
-        display2.show()
-        utime.sleep(2)
-
-        display2.text('This is the',0,0)
-        display2.text('current',0,12)
-        display2.text('configuration of',0,24)
-        display2.text('our Solar System.',0,36)
-        display2.show()
-
-        #call function in loop for overlay of Orbits
-        for index, name in enumerate(names):
-            oled.fill(0)
-            orbitTracker(name)
-            oled.text(name, 0, 0)
-            oled.show()
-            display1.show()
-            utime.sleep(2)
-
-        oled.fill(0)
-        display1.fill(0)
-        display2.fill(0)
-
-        oled.show()
-        display1.show()
-        display2.show()
-
-        utime.sleep(2)
-
-        display2.text('This is some',0,0)
-        display2.text('information',0,12)
-        display2.text('about where the',0,24)
-        display2.text('planets are now.',0,36)
-        display2.show()
-
-        utime.sleep(4)
-
-        display2.fill(0)
-        display2.show()
-
-        #call orbit function in loop for each individual planet
-        for index, name in enumerate(names):
-            oled.fill(0)
-            oled.text(name, 0, 0)
-            oled.show()
-
-            orbitTracker(name)
-            # show earth on display 1
-            graphics1.circle(xc + xe, yc - ye, 1, 1)
-            orbitData1(name)
-
-            display1.show()
-            display2.show()
-            utime.sleep(3)
-
-            display2.fill(0)
-            orbitData2(name)
-            display2.show()
-            utime.sleep(3)
-
-            display1.fill(0)
-            display2.fill(0)
-            display1.show()
-            display2.show()
+        ##### galactic sequence
 
 
-        oled.fill(0)
-        display1.fill(0)
-        display2.fill(0)
-
-        oled.show()
-        display1.show()
-        display2.show()
-
-        utime.sleep(2)
-
-        display1.fill(0)
-        display1.show()
-        utime.sleep(2)
+        ## Earth - Sun sequence
+        #draw earth
+        xe = 114
+        ye = 31
+        rad_e = 29
 
         display2.text('This is our',0,0)
-        display2.text('solar system.',0,12)
+        display2.text('Earth.',0,12)
+
+        for i in range(rad_e):
+            display1.fill(0)
+            graphics1.fill_circle(xe, ye, rad_e - i, 1)
+            display1.show()
+            utime.sleep(0.2)
 
         display2.show()
-
-        xc = 63
-        yc = 31
-        rad = 29
-        graphics1.circle(xc, yc, rad - i, 1)
         utime.sleep(2)
 
-        for i in range(rad):
-            graphics1.circle(xc, yc, rad - i, 1)
-            display1.show()
-            utime.sleep(1)
+        #draw Sun
+        display2.fill(0)
+        display2.text('This is our',0,0)
+        display2.text('star, the Sun.',0,12)
+        display2.show()
+
+        xs = -36
+        ys = ye
+        rad_s = 50
+        graphics1.fill_circle(xs, yc, rad_s, 1)
+        display1.show()
+        utime.sleep(2)
+
+        #earth-sun sizes
+        oled.text('Sun radius = 7.0e5 km',0,0)
+        oled.text('Earth radius = 6.4e3 km',0,12)
+        oled.show()
+
+        #draw distance line
+        graphics1.line(xs+rad_s, ys, xe, ye, 1)
+        #describe distance
+        display2.fill(0)
+        display2.text('dist = 1AU',0,0)
+        display2.text('Light takes 8', 0, 24)
+        display2.text('minutes to travel', 0, 36)
+        display2.text('this distance', 0, 48)
+
+
+
+        display1.show()
+        display2.show()
+
 
 
 
