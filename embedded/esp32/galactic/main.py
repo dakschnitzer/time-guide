@@ -476,287 +476,287 @@ while True:
         display2.text('This is our sky',0,0)
         display2.text('from here.',0,12)
 
-#        oled.fill(0)
-#        display1.fill(0)
-#        display2.fill(0)
-#
-#        oled.show()
-#        display1.show()
-#        display2.show()
-#
-#        utime.sleep(2)
-#
-#        display1.fill(0)
-#        display1.show()
-#        utime.sleep(2)
-#
-#
-#        ##### galactic sequence
-#        ## Sun - Earth sequence
-#        #draw earth
+        oled.fill(0)
+        display1.fill(0)
+        display2.fill(0)
+
+        oled.show()
+        display1.show()
+        display2.show()
+
+        utime.sleep(2)
+
+        display1.fill(0)
+        display1.show()
+        utime.sleep(2)
+
+
+        ##### galactic sequence
+        ## Sun - Earth sequence
+        #draw earth
         xe = 114
         ye = 31
         rad_e = 14
-#
-#        display2.text('This is our',0,0)
-#        display2.text('Earth.',0,12)
-#
-#        ICON = [
-#            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#            [ 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-#            [ 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
-#            [ 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-#            [ 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0],
-#            [ 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
-#            [ 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-#            [ 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-#            [ 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
-#            [ 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0],
-#            [ 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-#            [ 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-#            [ 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-#            [ 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-#            [ 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-#            [ 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-#            [ 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-#            [ 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
-#            [ 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0],
-#            [ 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0],
-#            [ 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0],
-#            [ 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0],
-#            [ 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0],
-#            [ 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
-#            [ 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
-#            [ 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-#            [ 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-#            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#        ]
-#
-#        for y, row in enumerate(ICON):
-#            for x, c in enumerate(row):
-#                display1.pixel(x + xe - 14, y + ye - 14, c)
-#
-#
-#        display1.show()
-#        display2.show()
-#
-#        utime.sleep(5)
-#
-#        for i in range(rad_e):
-#            display1.fill(0)
-#            graphics1.fill_circle(xe, ye, rad_e - i, 1)
-#            display1.show()
-#            utime.sleep(0.2)
-#
-#        display2.show()
-#        utime.sleep(2)
-#
-#        #draw Sun
-#        display2.fill(0)
-#        display2.text('This is our',0,0)
-#        display2.text('star, the Sun.',0,12)
-#        display2.show()
+
+        display2.text('This is our',0,0)
+        display2.text('Earth.',0,12)
+
+        ICON = [
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0],
+            [ 0, 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [ 0, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0, 0, 0, 0],
+            [ 0, 0, 0, 1, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0],
+            [ 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+            [ 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+            [ 0, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0],
+            [ 0, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 1, 1, 1, 0, 1, 0],
+            [ 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [ 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [ 1, 1, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [ 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [ 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [ 1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [ 1, 1, 1, 1, 1, 0, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [ 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1],
+            [ 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0],
+            [ 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 0],
+            [ 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0],
+            [ 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 1, 0, 0],
+            [ 0, 0, 0, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0],
+            [ 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0],
+            [ 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0],
+            [ 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ]
+
+        for y, row in enumerate(ICON):
+            for x, c in enumerate(row):
+                display1.pixel(x + xe - 14, y + ye - 14, c)
+
+
+        display1.show()
+        display2.show()
+
+        utime.sleep(5)
+
+        for i in range(rad_e):
+            display1.fill(0)
+            graphics1.fill_circle(xe, ye, rad_e - i, 1)
+            display1.show()
+            utime.sleep(0.2)
+
+        display2.show()
+        utime.sleep(2)
+
+        #draw Sun
+        display2.fill(0)
+        display2.text('This is our',0,0)
+        display2.text('star, the Sun.',0,12)
+        display2.show()
 #
         xs = -36
         ys = ye
         rad_s = 50
-#        graphics1.fill_circle(xs, ys, rad_s, 1)
-#        display1.show()
-#        utime.sleep(2)
-#
-#        #earth-sun sizes
-#        oled.text('Sun radius = ',0,0)
-#        oled.text('7.0e5 km',0,12)
-#        oled.text('Earth radius = ',0,36)
-#        oled.text('6.4e3 km',0,48)
-#        oled.show()
-#
-#        #draw distance line
-#        for x in range(xe - (xs + rad_s)):
-#            display1.pixel(xs + rad_s + x, ys, 1)
-#            utime.sleep(0.02)
-#            display1.show()
-#
-#        #describe distance
-#        display2.fill(0)
-#        display2.text('dist = 1AU',0,0)
-#        display2.text('Light takes 8', 0, 24)
-#        display2.text('min. to travel', 0, 36)
-#        display2.text('this distance', 0, 48)
-#
-#        display2.show()
-#
-#        utime.sleep(6)
-#
-#        oled.fill(0)
-#        display1.fill(0)
-#        display2.fill(0)
-#
-#        oled.show()
-#        display1.show()
-#        display2.show()
-#
-#
-#        ## Sun - Jupiter sequence
-#        #draw Jupiter
-#        #jupiter design
-#
-#        ICON = [
-#            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#            [ 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-#            [ 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-#            [ 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-#            [ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-#            [ 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
-#            [ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
-#            [ 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-#            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-#            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-#            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-#            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-#            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-#            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-#            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-#            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-#            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
-#            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
-#            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
-#            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0],
-#            [ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0],
-#            [ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0],
-#            [ 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
-#            [ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-#            [ 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
-#            [ 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
-#            [ 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
-#            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-#        ]
-#
-#        for y, row in enumerate(ICON):
-#            for x, c in enumerate(row):
-#                display1.pixel(x + xe - 14, y + ye - 14, c)
-#
-#        display1.show()
-#        display2.text('This is',0,0)
-#        display2.text('Jupiter.',0,12)
-#        display2.show()
-#
-#        utime.sleep(2)
-#
-#        display2.text('It is my',0,24)
-#        display2.text('favorite planet.',0,36)
-#        display2.show()
-#
-#        utime.sleep(4)
-#
-#        oled.text('Sometimes I',0,0)
-#        oled.text('wonder',0,12)
-#        oled.show()
-#
-#        utime.sleep(3)
-#
-#        oled.fill(0)
-#        oled.text('what it would',0,0)
-#        oled.text('be like',0,12)
-#        oled.show()
-#
-#        utime.sleep(3)
-#
-#        oled.fill(0)
-#        oled.text('to float,',0,0)
-#        oled.text('all alone,',0,12)
-#        oled.text('beside it.',0,24)
-#        oled.show()
-#
-#        utime.sleep(4)
-#
-#        display2.fill(0)
-#        oled.fill(0)
-#        oled.show()
-#        display2.show()
-#
-#        #reduce Jupiter on scale
+        graphics1.fill_circle(xs, ys, rad_s, 1)
+        display1.show()
+        utime.sleep(2)
+
+        #earth-sun sizes
+        oled.text('Sun radius = ',0,0)
+        oled.text('7.0e5 km',0,12)
+        oled.text('Earth radius = ',0,36)
+        oled.text('6.4e3 km',0,48)
+        oled.show()
+
+        #draw distance line
+        for x in range(xe - (xs + rad_s)):
+            display1.pixel(xs + rad_s + x, ys, 1)
+            utime.sleep(0.02)
+            display1.show()
+
+        #describe distance
+        display2.fill(0)
+        display2.text('dist = 1AU',0,0)
+        display2.text('Light takes 8', 0, 24)
+        display2.text('min. to travel', 0, 36)
+        display2.text('this distance', 0, 48)
+
+        display2.show()
+
+        utime.sleep(6)
+
+        oled.fill(0)
+        display1.fill(0)
+        display2.fill(0)
+
+        oled.show()
+        display1.show()
+        display2.show()
+
+
+        ## Sun - Jupiter sequence
+        #draw Jupiter
+        #jupiter design
+
+        ICON = [
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+            [ 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+            [ 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+            [ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+            [ 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [ 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1],
+            [ 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+            [ 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 1, 0],
+            [ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 1, 1, 1, 1, 0, 0],
+            [ 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 1, 1, 1, 1, 1, 0, 0],
+            [ 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+            [ 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+            [ 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0],
+            [ 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 0, 0, 0, 0, 0, 0, 0, 0],
+            [ 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+        ]
+
+        for y, row in enumerate(ICON):
+            for x, c in enumerate(row):
+                display1.pixel(x + xe - 14, y + ye - 14, c)
+
+        display1.show()
+        display2.text('This is',0,0)
+        display2.text('Jupiter.',0,12)
+        display2.show()
+
+        utime.sleep(2)
+
+        display2.text('It is my',0,24)
+        display2.text('favorite planet.',0,36)
+        display2.show()
+
+        utime.sleep(4)
+
+        oled.text('Sometimes I',0,0)
+        oled.text('wonder',0,12)
+        oled.show()
+
+        utime.sleep(3)
+
+        oled.fill(0)
+        oled.text('what it would',0,0)
+        oled.text('be like',0,12)
+        oled.show()
+
+        utime.sleep(3)
+
+        oled.fill(0)
+        oled.text('to float,',0,0)
+        oled.text('all alone,',0,12)
+        oled.text('beside it.',0,24)
+        oled.show()
+
+        utime.sleep(4)
+
+        display2.fill(0)
+        oled.fill(0)
+        oled.show()
+        display2.show()
+
+        #reduce Jupiter on scale
         xj = xe
         yj = ye
         rad_j = 14
-#
-#        for i in range(rad_j):
-#            display1.fill(0)
-#            graphics1.fill_circle(xj, yj, rad_j - i, 1)
-#            display1.show()
-#            utime.sleep(0.2)
-#
-#        utime.sleep(2)
-#
-#        #draw Sun
+
+        for i in range(rad_j):
+            display1.fill(0)
+            graphics1.fill_circle(xj, yj, rad_j - i, 1)
+            display1.show()
+            utime.sleep(0.2)
+
+        utime.sleep(2)
+
+        #draw Sun
         xs = 9
         rad_s = 5
-#        graphics1.fill_circle(xs, ys, rad_s, 1)
-#        display1.show()
-#        utime.sleep(2)
-#
-#        #upiter-sun sizes
-#        oled.fill(0)
-#        oled.text('Sun radius = ',0,0)
-#        oled.text('7.0e5 km',0,12)
-#        oled.text('Jupiter radius = ',0,36)
-#        oled.text('6.9e4 km',0,48)
-#
-#        oled.show()
-#
-#        #draw distance line
-#        for x in range(xj - (xs + rad_s)):
-#            display1.pixel(xs + rad_s + x, ys, 1)
-#            utime.sleep(0.05)
-#            display1.show()
-#
-#        #describe distance
-#        display2.fill(0)
-#        display2.text('dist = 5.2AU',0,0)
-#        display2.text('Light takes 43', 0, 24)
-#        display2.text('min. to travel', 0, 36)
-#        display2.text('this distance.', 0, 48)
-#
-#        display1.show()
-#        display2.show()
-#
-#        utime.sleep(4)
-#
-#
-#        oled.fill(0)
-#        display1.fill(0)
-#        display2.fill(0)
-#
-#        oled.show()
-#        display1.show()
-#        display2.show()
-#
-#
-#        ## Sun - Heliopause sequence
-#        utime.sleep(2)
-#
-#        display2.text('Our solar system',0,0)
-#        display2.text('is impressive.',0,12)
-#        display2.show()
-#
-#        utime.sleep(3)
-#
-#        display2.fill(0)
-#        display2.text('Far beyond my',0,0)
-#        display2.text('favorite planet',0,12)
-#        display2.show()
-#
-#        utime.sleep(3)
-#
-#        display2.fill(0)
-#        display2.text('Is the ',0,0)
-#        display2.text('Heliopause, the',0,12)
-#        display2.text('boundary between',0,24)
-#        display2.text('us and inter-',0,36)
-#        display2.text('stellar space.',0,48)
-#        display2.show()
-#
-#        utime.sleep(5)
+        graphics1.fill_circle(xs, ys, rad_s, 1)
+        display1.show()
+        utime.sleep(2)
+
+        #upiter-sun sizes
+        oled.fill(0)
+        oled.text('Sun radius = ',0,0)
+        oled.text('7.0e5 km',0,12)
+        oled.text('Jupiter radius = ',0,36)
+        oled.text('6.9e4 km',0,48)
+
+        oled.show()
+
+        #draw distance line
+        for x in range(xj - (xs + rad_s)):
+            display1.pixel(xs + rad_s + x, ys, 1)
+            utime.sleep(0.05)
+            display1.show()
+
+        #describe distance
+        display2.fill(0)
+        display2.text('dist = 5.2AU',0,0)
+        display2.text('Light takes 43', 0, 24)
+        display2.text('min. to travel', 0, 36)
+        display2.text('this distance.', 0, 48)
+
+        display1.show()
+        display2.show()
+
+        utime.sleep(4)
+
+
+        oled.fill(0)
+        display1.fill(0)
+        display2.fill(0)
+
+        oled.show()
+        display1.show()
+        display2.show()
+
+
+        ## Sun - Heliopause sequence
+        utime.sleep(2)
+
+        display2.text('Our solar system',0,0)
+        display2.text('is impressive.',0,12)
+        display2.show()
+
+        utime.sleep(3)
+
+        display2.fill(0)
+        display2.text('Far beyond my',0,0)
+        display2.text('favorite planet',0,12)
+        display2.show()
+
+        utime.sleep(3)
+
+        display2.fill(0)
+        display2.text('Is the ',0,0)
+        display2.text('Heliopause, the',0,12)
+        display2.text('boundary between',0,24)
+        display2.text('us and inter-',0,36)
+        display2.text('stellar space.',0,48)
+        display2.show()
+
+        utime.sleep(5)
 
         xh = 14
         yh = ye
@@ -764,58 +764,58 @@ while True:
 
         xs = 9
         rad_s = 5
-#
-#        #move Jupiter and heliopause
-#        for x in range(rad_h/rad_s):
-#            #draw Sun
-#            display1.fill(0)
-#
-#            graphics1.fill_circle(xs, ys, rad_s, 1)
-#
-#            #jupiter
-#            graphics1.fill_circle((xs + rad_s) + int((xj - (xs + rad_s))/(x + 1)), yj, 1, 1)
-#
-#            #helipause
-#            graphics1.circle(xh, yh, int(rad_h * ((rad_h/rad_s) / (x + 1))), 1)
-#            utime.sleep(0.2)
-#            display1.show()
-#
-##        graphics1.circle(xh, yh, rad_h, 1)
-#
-#
-#
-#        display2.fill(0)
-#        display2.text('At this scale,',0,0)
-#        display2.text('every pixel is',0,12)
-#        display2.text('equal to 1AU, the',0,24)
-#        display2.text('distance between',0,36)
-#        display2.text('Sun and Earth.',0,48)
-#        display2.show()
-#
-#        #draw distance line
-#        for x in range(xh + rad_h - (xs + rad_s)):
-#            display1.pixel(xs + rad_s + x, ys, 1)
-#            utime.sleep(0.2)
-#            display1.show()
-#
-#        #describe distance
-#        display2.fill(0)
-#        display2.text('dist = 100AU',0,0)
-#        display2.text('Light takes 14', 0, 24)
-#        display2.text('hours to travel', 0, 36)
-#        display2.text('this distance.', 0, 48)
-#
-#        display2.show()
-#
-#        utime.sleep(4)
-#
-#        oled.fill(0)
-#        display1.fill(0)
-#        display2.fill(0)
-#
-#        oled.show()
-#        display1.show()
-#        display2.show()
+
+        #move Jupiter and heliopause
+        for x in range(rad_h/rad_s):
+            #draw Sun
+            display1.fill(0)
+
+            graphics1.fill_circle(xs, ys, rad_s, 1)
+
+            #jupiter
+            graphics1.fill_circle((xs + rad_s) + int((xj - (xs + rad_s))/(x + 1)), yj, 1, 1)
+
+            #helipause
+            graphics1.circle(xh, yh, int(rad_h * ((rad_h/rad_s) / (x + 1))), 1)
+            utime.sleep(0.2)
+            display1.show()
+
+#        graphics1.circle(xh, yh, rad_h, 1)
+
+
+
+        display2.fill(0)
+        display2.text('At this scale,',0,0)
+        display2.text('every pixel is',0,12)
+        display2.text('equal to 1AU, the',0,24)
+        display2.text('distance between',0,36)
+        display2.text('Sun and Earth.',0,48)
+        display2.show()
+
+        #draw distance line
+        for x in range(xh + rad_h - (xs + rad_s)):
+            display1.pixel(xs + rad_s + x, ys, 1)
+            utime.sleep(0.2)
+            display1.show()
+
+        #describe distance
+        display2.fill(0)
+        display2.text('dist = 100AU',0,0)
+        display2.text('Light takes 14', 0, 24)
+        display2.text('hours to travel', 0, 36)
+        display2.text('this distance.', 0, 48)
+
+        display2.show()
+
+        utime.sleep(4)
+
+        oled.fill(0)
+        display1.fill(0)
+        display2.fill(0)
+
+        oled.show()
+        display1.show()
+        display2.show()
 
         ## Sun - Voyager sequence
         #draw Voyager
