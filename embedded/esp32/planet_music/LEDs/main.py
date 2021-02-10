@@ -345,15 +345,14 @@ while True:
 
         time.sleep(5)
 
-        try:
-            if [item for item in planet_list if planetname in item and 'rise' in item][0][2] == 'rise':
-                #get next set timestamp only and add to list if there's already a 'rise' timestamp
-                next_set_timestamp = planet_timestamp(planetname, 'set')
-                next_set_tuple = (next_set_timestamp, planetname, 'sett')
-                planet_list.append(next_set_tuple)
-                print('rise found in planet_list')
-                print('next set:', next_set_timestamp)
-        except:
+        if [item for item in planet_list if item[1] == planetname and item[2] == 'rise']:
+            #get next set timestamp only and add to list if there's already a 'rise' timestamp
+            next_set_timestamp = planet_timestamp(planetname, 'set')
+            next_set_tuple = (next_set_timestamp, planetname, 'sett')
+            planet_list.append(next_set_tuple)
+            print('rise found in planet_list')
+            print('next set:', next_set_timestamp)
+        else:
             print('no rise found in planet_list')
             #get next rise timestamp and add to tuple if there isn't a rise
             next_rise_timestamp = planet_timestamp(planetname, 'rise')
