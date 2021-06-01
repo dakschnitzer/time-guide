@@ -6,8 +6,9 @@ import machine, neopixel
 from machine import I2C, Pin
 import network
 import utime as time
-import urequests as requests
-from credentials import WIFI_SSID, WIFI_PASSWORD, WOLFRAM_API_KEY
+import urllib.urequest
+import ujson as json
+from credentials import WIFI_SSID, WIFI_PASSWORD
 from ntptime import settime
 # from scron.week import simple_cron
 import ubinascii
@@ -35,6 +36,9 @@ names = ['Sun', 'Moon', 'Mercury', 'Venus', 'Mars', 'Jupiter', 'Saturn', 'Uranus
 n = 81
 p = 13
 np = neopixel.NeoPixel(machine.Pin(p), n, bpp=4)
+stripl = int(n/len(names))
+
+eepoch = 946684800 #time between epoch and embedded epoch in seconds
 
 def do_connect():
     wlan = network.WLAN(network.STA_IF)
@@ -57,40 +61,11 @@ oled.text('wifi connected',0,0,1)
 oled.show()
 time.sleep(1)
 
-def planet_timestamp(name, action):
-    url = "http://api.wolframalpha.com/v1/result?i={0}%20{1}%20next%20unix%20time%3F&appid={2}".format(name, action, WOLFRAM_API_KEY)
-    print(url)
-    r = requests.get(url)
-    timestamp = r.text
-    timestamp = [x.strip() for x in timestamp.split(' ')]
-    timestamp = int(timestamp[0]) - 946684800 #convert to embedded Epoch
-    print(timestamp)
-    r.close()
-    del r
-    return timestamp
 
-def make_planet_list():
-    rise = [[0 for i in range(3)] for j in range(len(names))]
-    sett = [[0 for i in range(3)] for j in range(len(names))]
-    for i, name in enumerate(names) :
-        # obtain rise time from wolframalpha API
-        rise[i][0] = planet_timestamp(name, 'rise')
-        rise[i][1] = name
-        rise[i][2] = 'rise'
-
-        # obtain set time from wolframalpha API
-        sett[i][0] = planet_timestamp(name, 'set')
-        sett[i][1] = name
-        sett[i][2] = 'sett'
-
-        oled.fill(0)
-        oled.text('acquired:',0,0,1)
-        oled.text(name,0,16,1)
-        oled.show()
-
-    rise = [tuple(l) for l in rise]
-    sett = [tuple(l) for l in sett]
-    planet_list = rise + sett
+def make_planet_list(date):
+    with urllib.urequest.urlopen("https://time-guide.herokuapp.com/data?date={0}".format(date)) as url:
+        data = json.loads(url.read().decode())
+    planet_list = data["events"]
     return planet_list
 
 # LED list for each light
@@ -103,6 +78,12 @@ LED = [(0, 0, 0, 25),
        (0, 0, 0, 25),
        (0, 0, 0, 25),
        (0, 0, 0, 25)]
+
+#clear LEDs at boot
+for j in range(n):
+    np[j] = (0, 0, 0, 0)
+np.write()
+time.sleep(0.5)
 
 # set the RTC
 def set_time_with_retry(retries):
@@ -125,7 +106,7 @@ def set_time_with_retry(retries):
 
 set_time_with_retry(3)
 
-now = int(time.time()) # return time since the Epoch (embedded)
+now = int(time.time()) + eepoch # return time since the Epoch in Unix time
 print(now)
 now_local = time.localtime(now)
 now_local_str = " ".join(map(str, now_local))
@@ -139,25 +120,32 @@ oled.text(now_local_str,0,16,1)
 oled.show()
 time.sleep(1)
 
-planet_list = make_planet_list()
+#get next 24h planet list
+#first get today's list
+with urllib.urequest.urlopen("https://time-guide.herokuapp.com/data") as url:
+    data = json.loads(url.read().decode())
+planet_list = data["events"]
+#then get tomorrow's list
+date = '{0}/{1}/{2}'.format(now_local.tm_mon, now_local.tm_year, now_local.tm_year
+
+
+#sort chronologically
+planet_list.sort(key=lambda x: int(x[2]))
+
+#get rid of timestamps before now
+planet_list = [item for item in planet_list if item[2] > now]
+
 
 for i in range(len(names)):
 
-    #clear LEDs at boot
-    np[i * 9] = (0, 0, 0, 0)
-    np[i * 9 + 1] = (0, 0, 0, 0)
-    np[i * 9 + 2] = (0, 0, 0, 0)
-    np[i * 9 + 3] = (0, 0, 0, 0)
-    np[i * 9 + 4] = (0, 0, 0, 0)
-    np[i * 9 + 5] = (0, 0, 0, 0)
-    np[i * 9 + 6] = (0, 0, 0, 0)
-    np[i * 9 + 7] = (0, 0, 0, 0)
-    np[i * 9 + 8] = (0, 0, 0, 0)
-    np.write()
-    time.sleep(0.5)
 
     #turn on LEDs for planets already above horizon
-    if planet_list[i][0] > planet_list[i + 9][0]: # if rise time is later than set time, it's above the horizon
+
+    if [item for item in planet_list if item[2] == planetname and item[2] == 'rise']:
+    if planet_list[i][1] == planetname and planet_list[i][2] == action:
+
+
+    if planet_list[i][2] > planet_list[i + 9][2]: # if rise time is later than set time, it's above the horizon
         print('above horizon:', planet_list[i][1])
 
         dur_rem = planet_list[i + 9][0] - now #find time remaining until set
