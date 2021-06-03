@@ -118,7 +118,6 @@ print('local time string:', now_local_str)
 planet_list = make_planet_list()
 
 
-# sort of works up to here
 ###########################
 
 for i in range(len(names)):
