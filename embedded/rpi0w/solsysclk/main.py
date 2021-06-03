@@ -70,17 +70,17 @@ def planet_timestamp(name, action):
     t, values = find_discrete(t0, t1, f)
     #Find the times at which a discrete function of time changes value. in this case, find the set (0) and rise (1) times, t.
 
-    if action == rise:
+    if action == 'rise':
         #values array is 1 for the rise. we look up the index of the rise in the time array, t, to get the time of the rise event.
         timestamp = t[np.where(values == 1)].utc_datetime()
         timestamp = timestamp[0].timestamp()
 
-    else:
+    elif action == 'sett':
         #values array is 0 for the set. we look up the index of the set in the time array, t, to get the time of the set event.
         timestamp = t[np.where(values == 0)].utc_datetime()
         timestamp = timestamp[0].timestamp()
 
-    return timestamp
+    return int(timestamp)
 
 
 def make_planet_list():
