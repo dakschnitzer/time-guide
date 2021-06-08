@@ -2,6 +2,7 @@ import board
 import neopixel
 import time
 import datetime
+from datetime import timezone
 import numpy
 from skyfield.api import N, W, wgs84, load, utc
 from skyfield.almanac import find_discrete, risings_and_settings
@@ -31,8 +32,8 @@ planets = [sun,
 ts = load.timescale()
 
 # define variables
-lat = 38.7135
-lon = 78.1594
+lat = 38.9072
+lon = 77.0369
 #define city just by lat/lon for almanac lookup
 city = wgs84.latlon(lat * N, lon * W)
 names = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune']
@@ -60,13 +61,13 @@ LED = [(0, 0, 0, 25),
 
 def planet_timestamp(name, action):
     # this function returns the next rise or set time from now
-    t0 = datetime.datetime.now()
+    t0 = datetime.datetime.now(timezone.utc)
     print('t0:', t0)
     t1 = t0 + datetime.timedelta(hours=24)
 
-    t0 = t0.replace(tzinfo=utc)
+    # t0 = t0.replace(tzinfo=utc)
     t0 = ts.utc(t0)
-    t1 = t1.replace(tzinfo=utc)
+    # t1 = t1.replace(tzinfo=utc)
     t1 = ts.utc(t1)
 
     f = risings_and_settings(eph, planets[names.index(name)], city)
@@ -316,7 +317,7 @@ while True:
 
         if [item for item in planet_list if item[1] == planetname and item[2] == 'rise']:
             #get next set timestamp only and add to list if there's already a 'rise' timestamp
-            next_set_timestamp = planet_timestamp(planetname, 'set')
+            next_set_timestamp = planet_timestamp(planetname, 'sett')
             next_set_tuple = (next_set_timestamp, planetname, 'sett')
             planet_list.append(next_set_tuple)
             print('rise found in planet_list')
@@ -330,12 +331,11 @@ while True:
             print('next rise:', next_rise_timestamp)
 
             #get next set timestamp and add to list
-            next_set_timestamp = planet_timestamp(planetname, 'set')
+            next_set_timestamp = planet_timestamp(planetname, 'sett')
             next_set_tuple = (next_set_timestamp, planetname, 'sett')
             planet_list.append(next_set_tuple)
             print('next set:', next_set_timestamp)
 
-    # set_time_with_retry(3)
 
     now = int(time.time()) # return time since the Epoch (embedded)
     print('now:', now)
