@@ -1,0 +1,6 @@
+import board
+import neopixel
+np = neopixel.NeoPixel(board.D18, 9)
+
+np[0] = (0, 0, 0, 25)
+np.show()

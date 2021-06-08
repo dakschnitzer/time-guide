@@ -1,10 +1,8 @@
-import gc
-
-import machine, neopixel
+import board
+import neopixel
 import time
 import datetime
-from datetime import timedelta
-from pytz import timezone
+import numpy
 from skyfield.api import N, W, wgs84, load, utc
 from skyfield.almanac import find_discrete, risings_and_settings
 
@@ -39,25 +37,31 @@ lon = 78.1594
 city = wgs84.latlon(lat * N, lon * W)
 names = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune']
 
-# #initialize neopixel
-# n = 81
-# p = 13
-# np = neopixel.NeoPixel(machine.Pin(p), n, bpp=4)
-# # LED list for each light
-# LED = [(0, 0, 0, 25),
-#        (0, 0, 0, 25),
-#        (0, 0, 0, 25),
-#        (0, 0, 0, 25),
-#        (0, 0, 0, 25),
-#        (0, 0, 0, 25),
-#        (0, 0, 0, 25),
-#        (0, 0, 0, 25),
-#        (0, 0, 0, 25)]
+#initialize neopixel
+pixel_pin = board.D18
+n = 81
+ORDER = neopixel.RGBW
+
+pixels = neopixel.NeoPixel(
+    pixel_pin, n, brightness=1, pixel_order=ORDER
+)
+
+# LED list for each light
+LED = [(0, 0, 0, 25),
+        (0, 0, 0, 25),
+        (0, 0, 0, 25),
+        (0, 0, 0, 25),
+        (0, 0, 0, 25),
+        (0, 0, 0, 25),
+        (0, 0, 0, 25),
+        (0, 0, 0, 25),
+        (0, 0, 0, 25)]
 
 
 def planet_timestamp(name, action):
     # this function returns the next rise or set time from now
     t0 = datetime.datetime.now()
+    print('t0:', t0)
     t1 = t0 + datetime.timedelta(hours=24)
 
     t0 = t0.replace(tzinfo=utc)
@@ -72,12 +76,12 @@ def planet_timestamp(name, action):
 
     if action == 'rise':
         #values array is 1 for the rise. we look up the index of the rise in the time array, t, to get the time of the rise event.
-        timestamp = t[np.where(values == 1)].utc_datetime()
+        timestamp = t[numpy.where(values == 1)].utc_datetime()
         timestamp = timestamp[0].timestamp()
 
     elif action == 'sett':
         #values array is 0 for the set. we look up the index of the set in the time array, t, to get the time of the set event.
-        timestamp = t[np.where(values == 0)].utc_datetime()
+        timestamp = t[numpy.where(values == 0)].utc_datetime()
         timestamp = timestamp[0].timestamp()
 
     return int(timestamp)
@@ -118,21 +122,19 @@ print('local time string:', now_local_str)
 planet_list = make_planet_list()
 
 
-###########################
-
 for i in range(len(names)):
 
     #clear LEDs at boot
-    np[i * 9] = (0, 0, 0, 0)
-    np[i * 9 + 1] = (0, 0, 0, 0)
-    np[i * 9 + 2] = (0, 0, 0, 0)
-    np[i * 9 + 3] = (0, 0, 0, 0)
-    np[i * 9 + 4] = (0, 0, 0, 0)
-    np[i * 9 + 5] = (0, 0, 0, 0)
-    np[i * 9 + 6] = (0, 0, 0, 0)
-    np[i * 9 + 7] = (0, 0, 0, 0)
-    np[i * 9 + 8] = (0, 0, 0, 0)
-    np.write()
+    pixels[i * 9] = (0, 0, 0, 0)
+    pixels[i * 9 + 1] = (0, 0, 0, 0)
+    pixels[i * 9 + 2] = (0, 0, 0, 0)
+    pixels[i * 9 + 3] = (0, 0, 0, 0)
+    pixels[i * 9 + 4] = (0, 0, 0, 0)
+    pixels[i * 9 + 5] = (0, 0, 0, 0)
+    pixels[i * 9 + 6] = (0, 0, 0, 0)
+    pixels[i * 9 + 7] = (0, 0, 0, 0)
+    pixels[i * 9 + 8] = (0, 0, 0, 0)
+    pixels.show()
     time.sleep(0.5)
 
     #turn on LEDs for planets already above horizon
@@ -163,19 +165,19 @@ for i in range(len(names)):
             # 2. light up last int_rem LEDs for setting
             if i % 2 == 1:
                 for j in range(int_rem):
-                    np[i * 9 + 9 - (j + 1)] = LED[j]
-                    np.write()
+                    pixels[i * 9 + 9 - (j + 1)] = LED[j]
+                    pixels.show()
             elif i % 2 == 0:
                 for j in range(int_rem):
-                    np[i * 9 + j] = LED[j]
-                    np.write()
+                    pixels[i * 9 + j] = LED[j]
+                    pixels.show()
         elif int_rem == 0: #if the planet is about to set, light up last LED only
             if i % 2 == 1:
-                np[i * 9 + 9 - 1] = LED[0]
-                np.write()
+                pixels[i * 9 + 9 - 1] = LED[0]
+                pixels.show()
             elif i % 2 == 0:
-                np[i * 9] = LED[0]
-                np.write()
+                pixels[i * 9] = LED[0]
+                pixels.show()
 
         # if the planet is rising:
         else:
@@ -192,11 +194,11 @@ for i in range(len(names)):
             #3. light up LEDs
             for j in range(2 * int(n / len(names)) - int_rem):
                 if i % 2 == 1:
-                    np[i * 9 + j] = LED[j]
-                    np.write()
+                    pixels[i * 9 + j] = LED[j]
+                    pixels.show()
                 elif i % 2 == 0:
-                    np[i * 9 + 9 - (j + 1)] = LED[j]
-                    np.write()
+                    pixels[i * 9 + 9 - (j + 1)] = LED[j]
+                    pixels.show()
 
 list.sort(planet_list) #sort list of rise and set chronologically
 print('planet list:')
@@ -216,18 +218,6 @@ while True:
     print('delay is:', delay)
 
     if delay > 0:
-        oled.fill(0)
-        oled.text('next',0,0,1)
-        oled.text(planetname,35,0,1)
-        oled.text(action,95,0,1)
-        oled.text(timestamp_local_str,0,10,1)
-        oled.text('last now:',0,20,1)
-        oled.text(now_local_str,0,30,1)
-        oled.text('sleep:',0,40,1)
-        oled.text(str(delay),0,50,1)
-        oled.text('secs',95,50,1)
-        oled.show()
-
         # sleep until timestamp
         time.sleep(delay)
 
@@ -253,11 +243,11 @@ while True:
 
         #turn on first LED at rise action timestamp
         if planet_num % 2 == 1:
-            np[planet_num * 9] = LED[0]
-            np.write()
+            pixels[planet_num * 9] = LED[0]
+            pixels.show()
         if planet_num % 2 == 0:
-            np[planet_num * 9 + 9 - 1] = LED[0]
-            np.write()
+            pixels[planet_num * 9 + 9 - 1] = LED[0]
+            pixels.show()
 
         print(planetname)
         print('rise')
@@ -275,11 +265,11 @@ while True:
 
         for i in range(LED_count):
             if planet_num % 2 == 1:
-                np[planet_num * 9 + i] = LED[i]
-                np.write()
+                pixels[planet_num * 9 + i] = LED[i]
+                pixels.show()
             elif planet_num % 2 == 0:
-                np[planet_num * 9 + 9 - (i + 1)] = LED[i]
-                np.write()
+                pixels[planet_num * 9 + 9 - (i + 1)] = LED[i]
+                pixels.show()
 
     elif action == "a_set":
         print('action is:', action)
@@ -291,36 +281,36 @@ while True:
         LED_count = count + 1
         print('count is:', count)
 
-        np[planet_num * 9] = (0, 0, 0, 0)
-        np[planet_num * 9 + 1] = (0, 0, 0, 0)
-        np[planet_num * 9 + 2] = (0, 0, 0, 0)
-        np[planet_num * 9 + 3] = (0, 0, 0, 0)
-        np[planet_num * 9 + 4] = (0, 0, 0, 0)
-        np[planet_num * 9 + 5] = (0, 0, 0, 0)
-        np[planet_num * 9 + 6] = (0, 0, 0, 0)
-        np[planet_num * 9 + 7] = (0, 0, 0, 0)
-        np[planet_num * 9 + 8] = (0, 0, 0, 0)
+        pixels[planet_num * 9] = (0, 0, 0, 0)
+        pixels[planet_num * 9 + 1] = (0, 0, 0, 0)
+        pixels[planet_num * 9 + 2] = (0, 0, 0, 0)
+        pixels[planet_num * 9 + 3] = (0, 0, 0, 0)
+        pixels[planet_num * 9 + 4] = (0, 0, 0, 0)
+        pixels[planet_num * 9 + 5] = (0, 0, 0, 0)
+        pixels[planet_num * 9 + 6] = (0, 0, 0, 0)
+        pixels[planet_num * 9 + 7] = (0, 0, 0, 0)
+        pixels[planet_num * 9 + 8] = (0, 0, 0, 0)
 
         for i in range(LED_count):
             if planet_num % 2 == 1:
-                np[planet_num * 9 + 9 - (i + 1)] = LED[i]
-                np.write()
+                pixels[planet_num * 9 + 9 - (i + 1)] = LED[i]
+                pixels.show()
             if planet_num % 2 == 0:
-                np[planet_num * 9 + i] = LED[i]
-                np.write()
+                pixels[planet_num * 9 + i] = LED[i]
+                pixels.show()
 
     elif action == "sett":
         print('action is:', action)
-        np[planet_num * 9] = (0, 0, 0, 0)
-        np[planet_num * 9 + 1] = (0, 0, 0, 0)
-        np[planet_num * 9 + 2] = (0, 0, 0, 0)
-        np[planet_num * 9 + 3] = (0, 0, 0, 0)
-        np[planet_num * 9 + 4] = (0, 0, 0, 0)
-        np[planet_num * 9 + 5] = (0, 0, 0, 0)
-        np[planet_num * 9 + 6] = (0, 0, 0, 0)
-        np[planet_num * 9 + 7] = (0, 0, 0, 0)
-        np[planet_num * 9 + 8] = (0, 0, 0, 0)
-        np.write()
+        pixels[planet_num * 9] = (0, 0, 0, 0)
+        pixels[planet_num * 9 + 1] = (0, 0, 0, 0)
+        pixels[planet_num * 9 + 2] = (0, 0, 0, 0)
+        pixels[planet_num * 9 + 3] = (0, 0, 0, 0)
+        pixels[planet_num * 9 + 4] = (0, 0, 0, 0)
+        pixels[planet_num * 9 + 5] = (0, 0, 0, 0)
+        pixels[planet_num * 9 + 6] = (0, 0, 0, 0)
+        pixels[planet_num * 9 + 7] = (0, 0, 0, 0)
+        pixels[planet_num * 9 + 8] = (0, 0, 0, 0)
+        pixels.show()
 
         time.sleep(5)
 
@@ -345,7 +335,7 @@ while True:
             planet_list.append(next_set_tuple)
             print('next set:', next_set_timestamp)
 
-    set_time_with_retry(3)
+    # set_time_with_retry(3)
 
     now = int(time.time()) # return time since the Epoch (embedded)
     print('now:', now)
@@ -356,57 +346,4 @@ while True:
     list.sort(planet_list)
     print('planet list:')
     print(planet_list)
-
-
-
-
-names = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune']
-
-stripl = 9
-
-ts = load.timescale()
-
-lat = 38.7135
-lon = 78.1594
-#define city just by lat/lon for almanac lookup
-city = wgs84.latlon(lat * N, lon * W)
-
-
-# now = datetime.datetime.now()
-today = ts.utc(datetime.date.today())
-yday = ts.utc(datetime.date.today() - datetime.timedelta(days=1))
-
-f = risings_and_settings(planets, planet_name, city)
-#This returns a function taking a Time argument returning True if the body’s altazimuth altitude angle plus radius_degrees is greater than horizon_degrees, else False
-t, y = find_discrete(yday, today, f)
-#Find the times at which a discrete function of time changes value.
-tz = pytz.timezone('US/Eastern')
-
-for ti, yi in zip(t, y):
-    print(ti.utc_iso(), 'rise' if yi else 'set')
-
-
-
-
-######
-
-
-#define city with earth vector
-city = earth + wgs84.latlon(lat * N, lon * W)
-
-
-
-astro = city.at(t).observe(planet_name)
-alt, az, d = astro.apparent().altaz()
-
-    print(t)
-    print(alt)
-    print(az)
-    return jsonify(
-        n=n
-        )
-
-
-if __name__ == '__main__':
-    app.run()
 
