@@ -60,6 +60,7 @@ LED = [(0, 0, 0, 25),
 
 
 def planet_timestamp(name, action):
+    print(name, action)
     # this function returns the next rise or set time from now
     t0 = datetime.datetime.now(timezone.utc)
     print('t0:', t0)
@@ -79,13 +80,13 @@ def planet_timestamp(name, action):
         #values array is 1 for the rise. we look up the index of the rise in the time array, t, to get the time of the rise event.
         timestamp = t[numpy.where(values == 1)].utc_datetime()
         timestamp = timestamp[0].timestamp()
+        return int(timestamp)
 
     elif action == 'sett':
         #values array is 0 for the set. we look up the index of the set in the time array, t, to get the time of the set event.
         timestamp = t[numpy.where(values == 0)].utc_datetime()
         timestamp = timestamp[0].timestamp()
-
-    return int(timestamp)
+        return int(timestamp)
 
 
 def make_planet_list():
