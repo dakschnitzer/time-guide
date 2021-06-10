@@ -2,10 +2,16 @@ import board
 import neopixel
 import time
 import datetime
+import logging
 from datetime import timezone
 import numpy
 from skyfield.api import N, W, wgs84, load, utc
 from skyfield.almanac import find_discrete, risings_and_settings
+
+#initialize log
+logging.basicConfig(filename='main.log', level=logging.DEBUG)
+logging.logProcesses = 0
+logging.logThreads = 0
 
 #initialize skyfield stuff
 eph = load('de421.bsp')
@@ -61,10 +67,14 @@ LED = [(0, 0, 0, 25),
 
 def planet_timestamp(name, action):
     print(name, action)
+    logging.info('%s %s' % (name, action))
     # this function returns the next rise or set time from now
     t0 = datetime.datetime.now(timezone.utc)
     print('t0:', t0)
+    logging.info('t0: %s' % t0)
     t1 = t0 + datetime.timedelta(hours=24)
+    print('t1:', t1)
+    logging.info('t1: %s' % t1)
 
     # t0 = t0.replace(tzinfo=utc)
     t0 = ts.utc(t0)
@@ -79,14 +89,12 @@ def planet_timestamp(name, action):
     if action == 'rise':
         #values array is 1 for the rise. we look up the index of the rise in the time array, t, to get the time of the rise event.
         timestamp = t[numpy.where(values == 1)].utc_datetime()
-        timestamp = timestamp[0].timestamp()
-        return int(timestamp)
-
-    elif action == 'sett':
+    else:
         #values array is 0 for the set. we look up the index of the set in the time array, t, to get the time of the set event.
         timestamp = t[numpy.where(values == 0)].utc_datetime()
-        timestamp = timestamp[0].timestamp()
-        return int(timestamp)
+
+    timestamp = timestamp[0].timestamp()
+    return int(timestamp)
 
 
 def make_planet_list():
@@ -99,6 +107,7 @@ def make_planet_list():
         rise[i][2] = 'rise'
 
         print('acquired:', rise[i][0], name, 'rise')
+        logging.info('acquired: %s, %s, rise' % (rise[i][0], name))
 
         # obtain the next set time
         sett[i][0] = planet_timestamp(name, 'sett')
@@ -106,7 +115,7 @@ def make_planet_list():
         sett[i][2] = 'sett'
 
         print('acquired:', sett[i][0], name, 'sett')
-
+        logging.info('acquired: %s, %s, sett' % (sett[i][0], name))
 
     rise = [tuple(l) for l in rise]
     sett = [tuple(l) for l in sett]
@@ -115,11 +124,12 @@ def make_planet_list():
 
 now = int(time.time()) # return time since the Epoch
 print('current unix timestamp:', now)
+logging.info('current unix timestamp: %s' % now)
 now_local = time.localtime(now)
 now_local_str = " ".join(map(str, now_local))
 
-print('local time:', now_local)
 print('local time string:', now_local_str)
+logging.info('local time string: %s' % now_local_str)
 
 planet_list = make_planet_list()
 
@@ -205,19 +215,29 @@ for i in range(len(names)):
 list.sort(planet_list) #sort list of rise and set chronologically
 print('planet list:')
 print(planet_list)
+logging.info('planet_list: %s' % planet_list)
 
 while True:
     timestamp, planetname, action = planet_list.pop(0)
-    print('next up:', planetname, action, timestamp)
+
+    logging.info('next up:', planetname, action, timestamp)
     timestamp_local = time.localtime(timestamp)
     timestamp_local_str = " ".join(map(str, timestamp_local))
-    print(timestamp_local_str)
+    print('next up:',
+          'planet:', planetname,
+          'action:', action,
+          'unix timestamp:', timestamp,
+          'local event time:', timestamp_local_str)
+
+    logging.info('next up:',
+          'planet: %s, action: %s, unix timestamp: %s, local event time: %s' % (planetname, action, timestamp,timestamp_local_str))
 
     planet_num = names.index(planetname)
 
     #sleep until the action
     delay = timestamp - now
     print('delay is:', delay)
+    logging.info('delay is: %s' % delay)
 
     if delay > 0:
         # sleep until timestamp
@@ -225,6 +245,7 @@ while True:
 
     if action == 'rise':
         print('action is:', action)
+        logging.info('action is: %s' % action)
 
         #part 1: create list of above horizon intervals to adjust LEDs
         dur = [item for item in planet_list if planetname in item][0][0] - timestamp
@@ -232,6 +253,7 @@ while True:
         dur_int = int(dur / (2 * (n / len(names)) - 1)) #find duration of a single timestemp interval
         #dur_rem = dur % dur_int #find duration leftover (might not need this)
         print('total time above horizon:', dur)
+        logging.info('total time above horizon: %s' % dur)
 
         #add action timestamps for above_rise and above_set intervals between rise and set
         for j in range(int((n / len(names)) - 1)):
@@ -251,11 +273,12 @@ while True:
             pixels[planet_num * 9 + 9 - 1] = LED[0]
             pixels.show()
 
-        print(planetname)
-        print('rise')
+        print(planetname, 'rise')
+        logging.info('%s, rise' % planetname)
 
     elif action == "a_rise":
         print('action is:', action)
+        logging.info('action is: %s' % action)
 
         #count remaining instances of a_rise
         count = 0
@@ -264,6 +287,7 @@ while True:
                 count += 1
         LED_count = int(n / len(names)) - count
         print('count is:', count)
+        logging.info('count is: %s' % count)
 
         for i in range(LED_count):
             if planet_num % 2 == 1:
@@ -275,6 +299,7 @@ while True:
 
     elif action == "a_set":
         print('action is:', action)
+        logging.info('action is: %s' % action)
 
         count = 0
         for i in range(len(planet_list)):
@@ -282,6 +307,7 @@ while True:
                 count += 1
         LED_count = count + 1
         print('count is:', count)
+        logging.info('count is: %s' % count)
 
         pixels[planet_num * 9] = (0, 0, 0, 0)
         pixels[planet_num * 9 + 1] = (0, 0, 0, 0)
@@ -303,6 +329,8 @@ while True:
 
     elif action == "sett":
         print('action is:', action)
+        logging.info('action is: %s' % action)
+
         pixels[planet_num * 9] = (0, 0, 0, 0)
         pixels[planet_num * 9 + 1] = (0, 0, 0, 0)
         pixels[planet_num * 9 + 2] = (0, 0, 0, 0)
@@ -323,28 +351,41 @@ while True:
             planet_list.append(next_set_tuple)
             print('rise found in planet_list')
             print('next set:', next_set_timestamp)
+            logging.info('rise found in planet_list')
+            logging.info('next set: %s' % next_set_timestamp)
+
+
         else:
             print('no rise found in planet_list')
+            logging.info('no rise found in planet_list')
             #get next rise timestamp and add to tuple if there isn't a rise
             next_rise_timestamp = planet_timestamp(planetname, 'rise')
             next_rise_tuple = (next_rise_timestamp, planetname, 'rise')
             planet_list.append(next_rise_tuple)
             print('next rise:', next_rise_timestamp)
+            logging.info('next rise: %s' % next_rise_timestamp)
+
 
             #get next set timestamp and add to list
             next_set_timestamp = planet_timestamp(planetname, 'sett')
             next_set_tuple = (next_set_timestamp, planetname, 'sett')
             planet_list.append(next_set_tuple)
             print('next set:', next_set_timestamp)
+            logging.info('next set: %s' % next_set_timestamp)
 
 
     now = int(time.time()) # return time since the Epoch (embedded)
-    print('now:', now)
+    print('current unix timestamp:', now)
+    logging.info('current unix timestamp: %s' % now)
+
     now_local = time.localtime(now)
     now_local_str = " ".join(map(str, now_local))
-    print(now_local_str)
+    print('current local time:', now_local_str)
+    logging.info('current local time: %s' % now_local_str)
 
     list.sort(planet_list)
     print('planet list:')
     print(planet_list)
+    logging.info('planet list: %s' % planet_list)
+
 
