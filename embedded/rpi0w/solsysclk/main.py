@@ -219,8 +219,6 @@ logging.info('planet_list: %s' % planet_list)
 
 while True:
     timestamp, planetname, action = planet_list.pop(0)
-
-    logging.info('next up:', planetname, action, timestamp)
     timestamp_local = time.localtime(timestamp)
     timestamp_local_str = " ".join(map(str, timestamp_local))
     print('next up:',
@@ -228,9 +226,7 @@ while True:
           'action:', action,
           'unix timestamp:', timestamp,
           'local event time:', timestamp_local_str)
-
-    logging.info('next up:',
-          'planet: %s, action: %s, unix timestamp: %s, local event time: %s' % (planetname, action, timestamp,timestamp_local_str))
+    logging.info('next up: planet: %s, action: %s, unix timestamp: %s, local event time: %s' % (planetname, action, timestamp,timestamp_local_str))
 
     planet_num = names.index(planetname)
 
