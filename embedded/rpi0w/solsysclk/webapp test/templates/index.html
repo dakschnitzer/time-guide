@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <link rel="stylesheet" type="text/css" href="static/style.css">
+        <title>
+            Solar System Clock Form
+        </title>
+    </head>
+    <body>
+        <h3>
+            GPS Coordinates
+        </h3>
+        <p>
+            Please enter the  GPS coordinates of your Solar System Clock in decimal degrees:<br>
+            <form action="/forminfo" method="post">
+                Lat (N/S): <input type="text" name="lat">  <br />
+                Lon (W/E): <input type="text" name="lon" />
+                <input type="submit" name= "form" value="Submit" />
+            </form>
+            For example: Lat: 38.9072 N, Lon: 77.0369 W.
+        </p>
+    </body>
+</html>

@@ -7,12 +7,26 @@ from datetime import timezone
 import numpy
 from skyfield.api import N, W, wgs84, load, utc
 from skyfield.almanac import find_discrete, risings_and_settings
-
+from flask import Flask, render_template, request
 #initialize log
 logging.basicConfig(filename='main.log', format='%(asctime)s %(levelname)-8s %(message)s',
 datefmt='%Y-%m-%d %H:%M:%S', level=logging.DEBUG)
 logging.logProcesses = 0
 logging.logThreads = 0
+
+
+app = Flask(__name__)
+
+@app.route('/')
+def index():
+    return render_template('index.html')
+
+@app.route('/forminfo', methods=['POST'])
+def forminfo():
+    lat = request.form['lat']
+    lon = request.form['lon']
+    GPS = [lat, lon]
+    return GPS
 
 def planet_timestamp(name, action, ts, planets, city, eph, names):
     print(name, action)
@@ -70,7 +84,7 @@ def make_planet_list(ts, planets, city, eph, names):
     planet_list = rise + sett
     return planet_list
 
-def run_clock():
+def run_clock(GPS):
     #initialize skyfield stuff
     eph = load('de421.bsp')
     sun = eph['sun']
@@ -95,10 +109,10 @@ def run_clock():
     ts = load.timescale()
 
     # define variables
-    lat = 38.9072
-    lon = 77.0369
+    # lat = 38.9072
+    # lon = 77.0369
     #define city just by lat/lon for almanac lookup
-    city = wgs84.latlon(lat * N, lon * W)
+    city = wgs84.latlon(GPS[0] * N, GPS[1] * W)
     names = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune']
 
     #initialize neopixel
@@ -380,7 +394,9 @@ def run_clock():
 
 if __name__ == "__main__":
     try:
+        app.run(debug=True, host='0.0.0.0')
         run_clock()
+
     except Exception as e:
         logging.exception(e)
         raise
