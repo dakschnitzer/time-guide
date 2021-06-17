@@ -1,6 +1,14 @@
 from flask import Flask, render_template, request
 import json
-from main import run_clock
+import os
+import time
+import logging
+
+#initialize log
+logging.basicConfig(filename='webapp.log', format='%(asctime)s %(levelname)-8s %(message)s',
+datefmt='%Y-%m-%d %H:%M:%S', level=logging.DEBUG)
+logging.logProcesses = 0
+logging.logThreads = 0
 
 app = Flask(__name__)
 
@@ -11,6 +19,7 @@ def index():
 def save_config(data):
     with open('config.json', 'w') as outfile:
         json.dump(data, outfile)
+    os.chmod('config.json', 0o777)
 
 @app.route('/forminfo', methods=['POST'])
 def forminfo():
@@ -21,8 +30,10 @@ def forminfo():
         'lon': lon,
     }
     save_config(data)
-    run_clock()
-    return data
+    print(data)
+    logging.info('%s' % data)
+    time.sleep(3)
+    os.system('sudo shutdown -r now')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
