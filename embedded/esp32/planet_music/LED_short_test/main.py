@@ -1,9 +1,9 @@
 import machine, neopixel
 
 n = 9
-p = 5
+p = 13
+np = neopixel.NeoPixel(machine.Pin(p), n, bpp=4)
 
-np = neopixel.NeoPixel(machine.Pin(p), n)
 
 np[0] = (255, 0, 0)
 np[3] = (125, 204, 223)
