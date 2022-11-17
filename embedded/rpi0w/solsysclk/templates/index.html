@@ -1,14 +1,14 @@
 <!DOCTYPE html>
 <html>
     <head>
-        <link rel="stylesheet" type="text/css" href="style.css">
+        <link rel="stylesheet" type="text/css" href="static/style.css">
         <title>
             Solar System Clock Form
         </title>
     </head>
     <body>
     <center>
-    <img src="ssc_logo2.png" width="700">
+    <img src="static/ssc_logo2.png" width="700">
     </center>
         <h2>
             GPS Coordinates
@@ -18,13 +18,15 @@
         </p>
             <form action="/forminfo" method="post">
                 Latitude (N/S):<br>
-                <input type="text" name="lat">  <br><br>
+                <input type="text" name="lat"><br>
+                Enter positive number in decimal degrees for N (0 to 90), negative number for S (-90 to 0)<br><br>
                 Longitude (W/E):<br>
-                <input type="text" name="lon" /><br><br>
+                <input type="text" name="lon" /><br>
+                Enter positive number for E (0 to 180), negative number for W (-180 to 0)<br><br>
                 <input type="submit" name= "form" value="Submit" />
             </form>
         <p>
-            For example: Lat: 38.9072 N, Lon: 77.0369 W.
+            For example: Lat: 38.9072, Lon: -77.0369 are the coordinates for Washington, DC.
         </p>
     </body>
 </html>

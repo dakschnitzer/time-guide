@@ -110,7 +110,7 @@ def run_clock():
     # lon = 77.0369
     config_data = read_config()
     #define city just by lat/lon for almanac lookup
-    city = wgs84.latlon(float(config_data['lat']) * N, float(config_data['lon']) * W)
+    city = wgs84.latlon(float(config_data['lat']), float(config_data['lon']))
     names = ['sun', 'moon', 'mercury', 'venus', 'mars', 'jupiter', 'saturn', 'uranus', 'neptune']
 
     #initialize neopixel
