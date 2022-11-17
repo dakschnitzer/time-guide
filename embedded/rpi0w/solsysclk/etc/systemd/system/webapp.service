@@ -1,0 +1,10 @@
+[Unit]
+Description=Solar System Clock Webapp Service
+
+[Service]
+Type=exec
+WorkingDirectory=/home/pi
+ExecStart=/usr/bin/python3 -u /home/pi/webapp.py
+
+[Install]
+WantedBy=multi-user.target
