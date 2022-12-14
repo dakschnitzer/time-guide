@@ -35,7 +35,7 @@ def forminfo():
     time.sleep(3)
     # restart the clock service
     os.system('sudo systemctl restart clock')
-    return "success"
+    return render_template('thanks.html')
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0')
