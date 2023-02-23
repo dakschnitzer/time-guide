@@ -41,26 +41,19 @@ def find_rise_set(lat, lon, year, month, day, hour, minute, second, ra, dec):
     #find hour angle of body when altitude = 0
     ha_set = math.acos((-math.sin(lat) * math.sin(dec)) / (math.cos(lat) * math.cos(dec)))
     ha_set = math.degrees(ha_set)
-    #calculate UT of sun in south
+    #calculate UT of sun in south - can't figure out if a negative number means it's day before or day after.
     utss = (ra * 15 - gst0 * 15 - lon) / 15.0417
+    if utss >= 0:
+        utss = datetime(year, month, day, int(utss), int((utss * 60) % 60), int((utss * 3600 % 60)))
+    elif utss < 0:
+        utss = utss + 24
+        utss = datetime(year, month, day, int(utss), int((utss * 60) % 60), int((utss * 3600 % 60))) - timedelta(days = 1)
     
-    #local rise time
-    lrise = utss - ha_set / 15 + lon / 15
-    if lrise >= 0:
-        lrise = datetime(year, month, day, int(lrise), int((lrise * 60) % 60), int((lrise * 3600 % 60)))
     
-    elif lrise < 0:
-        lrise = lrise + 24
-        lrise = datetime(year, month, day, int(lrise), int((lrise * 60) % 60), int((lrise * 3600 % 60))) + timedelta(days = 1)
-    
-    #local set time
-    lset = utss + ha_set / 15 + lon / 15
-    if lset >= 0:
-        lset = datetime(year, month, day, int(lset), int((lset * 60) % 60), int((lset * 3600 % 60)))
-    
-    elif lset < 0:
-        lset = lset + 24
-        lset = datetime(year, month, day, int(lset), int((lset * 60) % 60), int((lset * 3600 % 60))) + timedelta(days = 1)
+    #local rise time in UTC
+    lrise = utss - timedelta(hours = ha_set / 15)  
+    #local set time in UTC
+    lset = utss + timedelta(hours = ha_set / 15)
     
     
     print('gst- in hours is', gst0,'utss in hours is', utss, 'ha_set in degrees is', ha_set, 'lrise is', lrise, 'lset is', lset, sep='\n')
