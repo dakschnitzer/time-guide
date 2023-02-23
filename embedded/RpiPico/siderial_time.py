@@ -27,7 +27,7 @@ def julian_date(year, month, day, utc=0):
     return(jd)
 
 
-def siderial_time(year, month, day, utc=0, long=0):
+def siderial_time(year, month, day, utc, lon):
     """
     Returns the siderial time in decimal hours. Longitude (long) is in 
     decimal degrees. If long=0, return value is Greenwich Mean Siderial Time 
@@ -36,11 +36,12 @@ def siderial_time(year, month, day, utc=0, long=0):
     jd = julian_date(year, month, day)
     t = (jd - 2451545.0)/36525
     # Greenwich siderial time at 0h UTC (hours)
-    st = (24110.54841 + 8640184.812866 * t +
+    gst0 = (24110.54841 + 8640184.812866 * t +
           0.093104 * t**2 - 0.0000062 * t**3) / 3600
     # Greenwich siderial time at given UTC
-    st = st + 1.00273790935*utc
+    gst = gst0 + 1.00273790935*utc
+    gst0 = gst0 % 24
     # Local siderial time at given UTC (longitude in degrees)
-    st = st + long/15
-    st = st % 24
-    return(st)
+    lst = gst + lon/15
+    lst = lst % 24
+    return(lst, gst0)
