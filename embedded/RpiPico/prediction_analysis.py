@@ -24,21 +24,26 @@ def predict_accuracy(lat, lon, start_year, start_month, start_day, start_hour, s
     
     radec = radec_list(start_year, start_month, start_day, start_hour, start_minute, start_second, name, 1, n_days, 0)
     predict_times = [[0 for i in range(5)] for j in range(len(radec))]
+
     
     #rise_times_p and set_times_p will be the predicted rise and set times.
     for i in range(len(radec)):
-        date = start_date + timedelta(days = i)
+        date = start_date + timedelta(days=i)
         
         ra = radec[i][1]
         dec = radec[i][2]
-        
+                
         predict_times[i] = find_rise_set(lat, lon, date.year, date.month, date.day, date.hour, date.minute, date.second, ra, dec)
-    
+        
+        print('date: ', date)
+        print('rise time:', predict_times[i][0])
+
     rise_times_p = [column[0] for column in predict_times]
     set_times_p = [column[1] for column in predict_times]
     ra = [column[2] for column in predict_times]
     gst0 = [column[3] for column in predict_times] 
     utss = [column[4] for column in predict_times]
+
     
     #next, generate list of daily actual rise, set times from skyfield
     #first, start on the same day as the predicted rise time
@@ -61,13 +66,17 @@ def predict_accuracy(lat, lon, start_year, start_month, start_day, start_hour, s
     rise_diff = [(predict - actual).total_seconds() for (predict, actual) in zip(rise_times_p, rise_times_actual)]
     print(rise_diff)
     
-    return rise_diff, ra, gst0, utss
+    return rise_diff, ra, gst0, utss, rise_times_p, rise_times_actual, date
     
 
-rise_diff = predict_accuracy(lat, lon, 2023, 2, 1, 0, 0, 0, 'mercury', 12)
+rise_diff = predict_accuracy(lat, lon, 2023, 2, 1, 0, 0, 0, 'jupiter', 6)
 ra = rise_diff[1]
 gst0 = rise_diff[2]
 utss = rise_diff[3]
+rise_times_p = rise_diff[4]
+rise_times_actual = rise_diff[5]
+date = rise_diff[6]
+
 rise_diff = rise_diff[0]
 
 

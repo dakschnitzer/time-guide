@@ -28,7 +28,7 @@ def planet_timestamp(name, action, ts, planets, city, eph, names):
     print('t0:', t0)
     logging.info('t0: %s' % t0)
     # make hours 24+1 because during spring, next sunset will be more than 24h later than current
-    t1 = t0 + datetime.timedelta(hours=25)
+    t1 = t0 + datetime.timedelta(hours=28)
     print('t1:', t1)
     logging.info('t1: %s' % t1)
 

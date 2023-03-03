@@ -43,6 +43,8 @@ def find_rise_set(lat, lon, year, month, day, hour, minute, second, ra, dec):
     ha_set = math.degrees(ha_set)
     #calculate UT of sun in south - can't figure out if a negative number means it's day before or day after.
     utss_hr = (ra * 15 - gst0 * 15 - lon) / 15.047
+    # utss_hr = utss_hr % 24
+    
     print('gst0: ', gst0)
     print('utss_hr: ', utss_hr)
     print('ra: ', ra)
