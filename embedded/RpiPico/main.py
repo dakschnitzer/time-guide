@@ -1,54 +1,64 @@
 import math
 from datetime import datetime, timedelta
-from siderial_time import siderial_time
+from planet_radec import *
+
+#define math stuff
+sind = lambda x: math.sin(math.radians(x))
+cosd = lambda x: math.cos(math.radians(x))
+atan2d = lambda y, x: math.degrees(math.atan2(y, x))
+asind = lambda x: math.degrees(math.asin(x))
+acosd = lambda x: math.degrees(math.acos(x))
+pi = math.pi
+sqrt = math.sqrt
 
 
-def find_alt(lat, lon, year, month, day, utc, ra, dec):
-    #this function returns body altitude by calculating the local siderial time from longitude and the "hour angle" from LST and right ascension
-    #utc variable is just UTC decimal hours (utc hour + minute/60 + second/3600)
-    lst = siderial_time(year, month, day, utc, lon)[0]
+def find_day_number(year, month, day):
+    day_number = 367*year - math.floor(7 * ( year + math.floor((month+9)/12))  / 4) + math.floor(275*month/9) + day - 730530
+    return day_number
+
+def altitude_azimuth(sidereal_time, right_ascension, declination, latitude):
+	hour_angle = sidereal_time - right_ascension
+	hour_angle = revolve_hour_angle(hour_angle)
+	hour_angle = hour_angle * 15
+	x = cosd(hour_angle)*cosd(declination)
+	y = sind(hour_angle)*cosd(declination)
+	z = sind(declination)
+	x_horizon = x * sind(latitude) - z * cosd(latitude)
+	y_horizon = y
+	z_horizon = x * cosd(latitude) + z * sind(latitude)
+	azimuth = atan2d(y_horizon,x_horizon) + 180 
+	altitude = asind(z_horizon)
+	return altitude, azimuth
+
+
+def find_rise_set(lat, lon, name, day_number, UT):
+    #need to select the appropriate planet_radec function based on the "name" input variable
+    planet_radec = {'sun': sun_radec, 
+                    'moon': moon_radec, 
+                    'mercury': mercury_radec, 
+                    'venus': venus_radec, 
+                    'mars': mars_radec, 
+                    'jupiter': jupiter_radec, 
+                    'saturn': saturn_radec, 
+                    'uranus': uranus_radec, 
+                    'neptune': neptune_radec}
     
-    # ha = hour angle of star in degrees = (lst - RA)(360/24); lst = local sidereal time 
-    ha = (lst - ra) * 15
-    print('ha in degrees is', ha, sep='\n')
-    
-    lat = math.radians(lat)
-    lon = math.radians(lon)
-    dec = math.radians(dec)
-    ha = math.radians(ha)
-    
-    # Use RA and Dec to calculate Alt and time between rising and setting at GPS location
-    
-    alt= math.asin(math.sin(lat) * math.sin(dec) + math.cos(lat) * math.cos(dec) * math.cos(ha))
-    alt = math.degrees(alt)
-    print('altitude degrees is', alt, sep='\n')
-    return(alt)
-
-def find_dur(lat, year, month, day, utc, dec):
-    #this function returns body duration above horizon from observer latitude and body declination
-    # calculate time above horizon from local coordinates
-    dur = 0.13333 * (180 - math.degrees(math.acos(math.tan(lat) * math.tan(dec))))
-    print('duration hours is', dur, sep='\n')
-    return(dur)
-
-
-def find_rise_set(lat, lon, year, month, day, hour, minute, second, ra, dec):
+    #find RA, Dec for planet
+    ra = planet_radec[name](day_number)[0]
+    dec = planet_radec[name](day_number)[1]
+        
     #find greenwich siderial time at midnight
-    gst0 = siderial_time(year, month, day, hour + minute/60 + second/3600, lon)[1]
-    lat = math.radians(lat)
-    dec = math.radians(dec)
+    GMST0 = sun_siderial(day_number, lat, lon, UT)[1]
     
+    #gst0 = siderial_time(year, month, day, hour + minute/60 + second/3600, lon)[1]
+
+
     #find hour angle of body when altitude = 0
-    ha_set = math.acos((-math.sin(lat) * math.sin(dec)) / (math.cos(lat) * math.cos(dec)))
-    ha_set = math.degrees(ha_set)
+    ha_set = acosd((-sind(lat) * sind(dec)) / (cosd(lat) * cosd(dec)))
     #calculate UT of sun in south - can't figure out if a negative number means it's day before or day after.
-    utss_hr = (ra * 15 - gst0 * 15 - lon) / 15.047
+    utss_hr = (ra * 15 - GMST0 * 15 - lon) / 15.047
     # utss_hr = utss_hr % 24
     
-    print('gst0: ', gst0)
-    print('utss_hr: ', utss_hr)
-    print('ra: ', ra)
-    print('ra-gst0: ', ra-gst0)
     
     utss = datetime(year, month, day) + timedelta(hours = utss_hr)
     
@@ -59,26 +69,42 @@ def find_rise_set(lat, lon, year, month, day, hour, minute, second, ra, dec):
     #     utss = datetime(year, month, day, int(utss), int((utss * 60) % 60), int((utss * 3600 % 60))) 
     #     #- timedelta(days = 1)
     
-    print('utss timestamp: ', utss)
     #local rise time in UTC
     lrise = utss - timedelta(hours = ha_set / 15)  
     #local set time in UTC
     lset = utss + timedelta(hours = ha_set / 15)
     
+    print('name: ', name)
+    print('GMST0: ', GMST0)
+    print('ra: ', ra)
+    print('dec: ', dec)
+    print('ha_set hours: ', ha_set/15)
+    print('utss_hr: ', utss_hr)
+    print('utss timestamp: ', utss)
+    print('lrise timestamp: ', lrise)
+    print('lset timestamp: ', lset)
+
     
     # print('gst- in hours is', gst0,'utss in hours is', utss, 'ha_set in degrees is', ha_set, 'lrise is', lrise, 'lset is', lset, sep='\n')
     
-    return lrise, lset, ra, gst0, utss_hr
+    return lrise, lset, ra, GMST0, utss_hr
 
 
-# now = datetime.utcnow()
-# year = now.year
-# month = now.month
-# day = now.day
+
+now = datetime.utcnow()
+year = now.year
+month = now.month
+day = now.day
+UT = datetime.utcnow().hour + datetime.utcnow().minute/60 + datetime.utcnow().second/3600
+day_number = find_day_number(year, month, day)
+name = 'jupiter'
+lat = 38.9072
+lon = -77.0369
+
+find_rise_set(lat, lon, name, day_number, UT)
 
 
-# lat = 38.9072
-# lon = -77.0369
+# 
 
 # ra = 5.0266
 # dec = 0.4406786676497294
